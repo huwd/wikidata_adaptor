@@ -1,0 +1,345 @@
+require "json"
+require "webmock"
+
+module WikidataAdaptor
+  module TestHelpers
+    module RestApi
+
+      WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
+
+      def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil, new_session: nil)
+        with.merge!(headers: { WikidataAdaptor::RestApi::AUTH_HEADER_NAME => session }) if session
+        session = nil if response_status >= 400
+        to_return = { status: response_status, body: response_body.merge(session: session).compact.to_json }
+        if with.empty?
+          stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").to_return(**to_return)
+        else
+          stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").with(**with).to_return(**to_return)
+        end
+      end
+
+      ###############################
+      # GET /entities/items/:item_id
+      ###############################
+      def stub_get_item(item_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}",
+          response_body: response_body || {
+            "id": "#{item_id}",
+            "type": "item",
+            "labels": {
+              "en": "Douglas Adams",
+              "fr": "Douglas Adams"
+            },
+            "descriptions": {
+              "en": "English science fiction writer and humourist",
+              "fr": "écrivain de science-fiction et humoriste anglais"
+            },
+            "aliases": {
+              "en": [
+                "Douglas Noel Adams",
+                "Douglas Noël Adams"
+              ],
+              "fr": [
+                "Douglas Noel Adams"
+              ]
+            },
+            "sitelinks": {
+              "afwiki": {
+                "title": "Douglas Adams",
+                "badges": [
+                  "Q17437798"
+                ],
+                "url": "https://af.wikipedia.org/wiki/Douglas_Adams"
+              },
+              "arwiki": {
+                "title": "دوغلاس آدمز",
+                "badges": [],
+                "url": "https://ar.wikipedia.org/wiki/%D8%AF%D9%88%D8%BA%D9%84%D8%A7%D8%B3_%D8%A2%D8%AF%D9%85%D8%B2"
+              }
+            },
+            "statements": {
+              "additionalProp1": [
+                {
+                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  "rank": "normal",
+                  "property": {
+                    "id": "P92",
+                    "data-type": "string"
+                  },
+                  "value": {
+                    "content": "I am a goat",
+                    "type": "value"
+                  },
+                  "qualifiers": [],
+                  "references": []
+                }
+              ],
+              "additionalProp2": [
+                {
+                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  "rank": "normal",
+                  "property": {
+                    "id": "P92",
+                    "data-type": "string"
+                  },
+                  "value": {
+                    "content": "I am a goat",
+                    "type": "value"
+                  },
+                  "qualifiers": [],
+                  "references": []
+                }
+              ],
+              "additionalProp3": [
+                {
+                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  "rank": "normal",
+                  "property": {
+                    "id": "P92",
+                    "data-type": "string"
+                  },
+                  "value": {
+                    "content": "I am a goat",
+                    "type": "value"
+                  },
+                  "qualifiers": [],
+                  "references": []
+                }
+              ]
+            }
+          }
+        )
+      end
+
+      def stub_get_item_invalid_item(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}",
+          response_status: 400,
+          response_body: {
+            "code": "invalid-item-id",
+            "message": "Not a valid item ID: {#{item_id}}"
+          }
+        )
+      end
+
+      def stub_get_item_not_found(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}",
+          response_status: 404,
+          response_body: {
+            "code": "item-not-found",
+            "message": "Could not find an item with the ID: {#{item_id}}"
+          }
+        )
+      end
+
+      def stub_get_item_unexpected_error(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}",
+          response_status: 500,
+          response_body: {
+            "code": "unexpected-error",
+            "message": "Unexpected Error"
+          }
+        )
+      end
+
+      #####################################
+      # GET /entities/items/:item_id/labels
+      #####################################
+      def stub_get_item_labels(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/labels",
+          response_body: {
+            "en": "Douglas Adams",
+            "fr": "Douglas Adams"
+          }
+        )
+      end
+
+      ####################################################
+      # GET /entities/items/:item_id/labels/:language_code
+      ####################################################
+      def stub_get_item_label(item_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/labels/#{language_code}",
+          response_body: "Douglas Adams"
+        )
+      end
+
+      ###########################################
+      # GET /entities/items/:item_id/descriptions
+      ###########################################
+      def stub_get_item_descriptions(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/descriptions",
+          response_body: {
+            "en": "English science fiction writer and humourist",
+            "fr": "écrivain de science-fiction et humoriste anglais"
+          }
+        )
+      end
+
+      ##########################################################
+      # GET /entities/items/:item_id/descriptions/:language_code
+      ##########################################################
+      def stub_get_item_description(item_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/descriptions/#{language_code}",
+          response_body: "English science fiction writer and humourist"
+        )
+      end
+
+      ######################################
+      # GET /entities/items/:item_id/aliases
+      ######################################
+      def stub_get_item_aliases(item_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/aliases",
+          response_body: {
+            "en": [
+              "Douglas Noel Adams",
+              "Douglas Noël Adams"
+            ],
+            "fr": [
+              "Douglas Noel Adams"
+            ]
+          }
+        )
+      end
+
+      #####################################################
+      # GET /entities/items/:item_id/aliases/:language_code
+      #####################################################
+      def stub_get_item_alias(item_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/aliases/#{language_code}",
+          response_body: [
+            "Douglas Noel Adams",
+            "Douglas Noël Adams"
+          ]
+        )
+      end
+
+      #########################################
+      # GET /entities/items/:item_id/statements
+      #########################################
+      def stub_get_item_statements(item_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/statements",
+          response_body: response_body || {
+            "additionalProp1": [
+              {
+                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                "rank": "normal",
+                "property": {
+                  "id": "P92",
+                  "data-type": "string"
+                },
+                "value": {
+                  "content": "I am a goat",
+                  "type": "value"
+                },
+                "qualifiers": [],
+                "references": []
+              }
+            ],
+            "additionalProp2": [
+              {
+                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                "rank": "normal",
+                "property": {
+                  "id": "P92",
+                  "data-type": "string"
+                },
+                "value": {
+                  "content": "I am a goat",
+                  "type": "value"
+                },
+                "qualifiers": [],
+                "references": []
+              }
+            ],
+            "additionalProp3": [
+              {
+                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                "rank": "normal",
+                "property": {
+                  "id": "P92",
+                  "data-type": "string"
+                },
+                "value": {
+                  "content": "I am a goat",
+                  "type": "value"
+                },
+                "qualifiers": [],
+                "references": []
+              }
+            ]
+          }
+        )
+      end
+
+      ########################################################
+      # GET /entities/items/:item_id/statements/:statement_id
+      ########################################################
+      def stub_get_item_statement(item_id, statement_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/statements/#{statement_id}",
+          response_body: {
+            "id": "#{statement_id}",
+            "rank": "normal",
+            "property": {
+              "id": "P92",
+              "data-type": "string"
+            },
+            "value": {
+              "content": "I am a goat",
+              "type": "value"
+            },
+            "qualifiers": [],
+            "references": []
+          }
+        )
+      end
+
+      ###############################
+      # GET /statements/:statement_id
+      ###############################
+      def stub_get_statement(statement_id)
+        stub_rest_api_request(
+          :get,
+          "/statements/#{statement_id}",
+          response_body: {
+            "id": "#{statement_id}",
+            "rank": "normal",
+            "property": {
+              "id": "P92",
+              "data-type": "string"
+            },
+            "value": {
+              "content": "I am a goat",
+              "type": "value"
+            },
+            "qualifiers": [],
+            "references": []
+          }
+        )
+      end
+
+    end
+  end
+end
