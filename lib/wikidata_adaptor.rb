@@ -3,8 +3,19 @@
 require "api_adaptor"
 
 require_relative "wikidata_adaptor/version"
+require_relative "wikidata_adaptor/rest_api"
 
 module WikidataAdaptor
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.rest_endpoint
+    ENV["WIKIBASE_REST_ENDPOINT"] || "https://wikidata.org/w/rest.php/wikibase/v0"
+  end
+
+  # Creates a WikidataAdaptor::RestApi adapter
+  #
+  # @return [WikidataAdaptor::RestApi]
+  def self.rest_api
+    WikidataAdaptor::RestApi.new(rest_endpoint)
+  end
 end
