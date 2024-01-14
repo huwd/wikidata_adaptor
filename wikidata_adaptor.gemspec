@@ -33,9 +33,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "api_adaptor", "~> 0.0.1"
 
-  # Uncomment to register a new dependency of your gem
-  spec.add_development_dependency "webmock", "~> 3.17"
-
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
   spec.metadata["rubygems_mfa_required"] = "true"
