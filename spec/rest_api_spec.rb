@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "wikidata_adaptor/rest_api"
 require "wikidata_adaptor/test_helpers/rest_api"
 require "spec_helper"
@@ -39,9 +41,9 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "gets item labels in all locales by item_id" do
       stub_get_item_labels(item_id)
       expect(api_client.get_item_labels(item_id).parsed_content).to eq({
-        "en" => "Douglas Adams",
-        "fr" => "Douglas Adams"
-      })
+                                                                         "en" => "Douglas Adams",
+                                                                         "fr" => "Douglas Adams"
+                                                                       })
     end
   end
 
@@ -56,9 +58,9 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "gets item descriptions in all locales by item_id" do
       stub_get_item_descriptions(item_id)
       expect(api_client.get_item_descriptions(item_id).parsed_content).to eq({
-        "en" => "English science fiction writer and humourist",
-        "fr" => "écrivain de science-fiction et humoriste anglais"
-      })
+                                                                               "en" => "English science fiction writer and humourist",
+                                                                               "fr" => "écrivain de science-fiction et humoriste anglais"
+                                                                             })
     end
   end
 
@@ -75,14 +77,14 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "gets item aliases in all locales by item_id" do
       stub_get_item_aliases(item_id)
       expect(api_client.get_item_aliases(item_id).parsed_content).to eq({
-        "en" => [
-          "Douglas Noel Adams",
-          "Douglas Noël Adams"
-        ],
-        "fr" => [
-          "Douglas Noel Adams"
-        ]
-      })
+                                                                          "en" => [
+                                                                            "Douglas Noel Adams",
+                                                                            "Douglas Noël Adams"
+                                                                          ],
+                                                                          "fr" => [
+                                                                            "Douglas Noel Adams"
+                                                                          ]
+                                                                        })
     end
   end
 
@@ -97,8 +99,8 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "has a test helper that allows you to submit your own response to test" do
       stub_get_item_statements(item_id, { "foo" => "bar" })
       expect(api_client.get_item_statements(item_id).parsed_content).to eq({
-        "foo" => "bar"
-      })
+                                                                             "foo" => "bar"
+                                                                           })
     end
   end
 
@@ -106,19 +108,19 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "returns a specific statement by item_id and statement_id" do
       stub_get_item_statement(item_id, statement_id)
       expect(api_client.get_item_statement(item_id, statement_id).parsed_content).to eq({
-        "id" => "#{statement_id}",
-        "rank" => "normal",
-        "property" => {
-          "id" => "P92",
-          "data-type" => "string"
-        },
-        "value" => {
-          "content" => "I am a goat",
-          "type" => "value"
-        },
-        "qualifiers" => [],
-        "references" => []
-      })
+                                                                                          "id" => statement_id.to_s,
+                                                                                          "rank" => "normal",
+                                                                                          "property" => {
+                                                                                            "id" => "P92",
+                                                                                            "data-type" => "string"
+                                                                                          },
+                                                                                          "value" => {
+                                                                                            "content" => "I am a goat",
+                                                                                            "type" => "value"
+                                                                                          },
+                                                                                          "qualifiers" => [],
+                                                                                          "references" => []
+                                                                                        })
     end
   end
 
@@ -126,19 +128,19 @@ RSpec.describe WikidataAdaptor::RestApi do
     it "returns a specific statement statement_id" do
       stub_get_statement(statement_id)
       expect(api_client.get_statement(statement_id).parsed_content).to eq({
-        "id" => "#{statement_id}",
-        "rank" => "normal",
-        "property" => {
-          "id" => "P92",
-          "data-type" => "string"
-        },
-        "value" => {
-          "content" => "I am a goat",
-          "type" => "value"
-        },
-        "qualifiers" => [],
-        "references" => []
-      })
+                                                                            "id" => statement_id.to_s,
+                                                                            "rank" => "normal",
+                                                                            "property" => {
+                                                                              "id" => "P92",
+                                                                              "data-type" => "string"
+                                                                            },
+                                                                            "value" => {
+                                                                              "content" => "I am a goat",
+                                                                              "type" => "value"
+                                                                            },
+                                                                            "qualifiers" => [],
+                                                                            "references" => []
+                                                                          })
     end
   end
 end

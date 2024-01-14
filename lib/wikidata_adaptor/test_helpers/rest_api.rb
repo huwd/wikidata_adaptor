@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 require "webmock"
 
@@ -6,7 +8,8 @@ module WikidataAdaptor
     module RestApi
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
 
-      def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil, new_session: nil)
+      def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil,
+                                new_session: nil)
         with.merge!(headers: { WikidataAdaptor::RestApi::AUTH_HEADER_NAME => session }) if session
         session = nil if response_status >= 400
         to_return = { status: response_status, body: prepare_response(response_body, session) }
@@ -25,86 +28,86 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}",
           response_body: response_body || {
-            "id": "#{item_id}",
-            "type": "item",
-            "labels": {
-              "en": "Douglas Adams",
-              "fr": "Douglas Adams"
+            id: item_id.to_s,
+            type: "item",
+            labels: {
+              en: "Douglas Adams",
+              fr: "Douglas Adams"
             },
-            "descriptions": {
-              "en": "English science fiction writer and humourist",
-              "fr": "écrivain de science-fiction et humoriste anglais"
+            descriptions: {
+              en: "English science fiction writer and humourist",
+              fr: "écrivain de science-fiction et humoriste anglais"
             },
-            "aliases": {
-              "en": [
+            aliases: {
+              en: [
                 "Douglas Noel Adams",
                 "Douglas Noël Adams"
               ],
-              "fr": [
+              fr: [
                 "Douglas Noel Adams"
               ]
             },
-            "sitelinks": {
-              "afwiki": {
-                "title": "Douglas Adams",
-                "badges": [
+            sitelinks: {
+              afwiki: {
+                title: "Douglas Adams",
+                badges: [
                   "Q17437798"
                 ],
-                "url": "https://af.wikipedia.org/wiki/Douglas_Adams"
+                url: "https://af.wikipedia.org/wiki/Douglas_Adams"
               },
-              "arwiki": {
-                "title": "دوغلاس آدمز",
-                "badges": [],
-                "url": "https://ar.wikipedia.org/wiki/%D8%AF%D9%88%D8%BA%D9%84%D8%A7%D8%B3_%D8%A2%D8%AF%D9%85%D8%B2"
+              arwiki: {
+                title: "دوغلاس آدمز",
+                badges: [],
+                url: "https://ar.wikipedia.org/wiki/%D8%AF%D9%88%D8%BA%D9%84%D8%A7%D8%B3_%D8%A2%D8%AF%D9%85%D8%B2"
               }
             },
-            "statements": {
-              "additionalProp1": [
+            statements: {
+              additionalProp1: [
                 {
-                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  "rank": "normal",
-                  "property": {
-                    "id": "P92",
+                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  rank: "normal",
+                  property: {
+                    id: "P92",
                     "data-type": "string"
                   },
-                  "value": {
-                    "content": "I am a goat",
-                    "type": "value"
+                  value: {
+                    content: "I am a goat",
+                    type: "value"
                   },
-                  "qualifiers": [],
-                  "references": []
+                  qualifiers: [],
+                  references: []
                 }
               ],
-              "additionalProp2": [
+              additionalProp2: [
                 {
-                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  "rank": "normal",
-                  "property": {
-                    "id": "P92",
+                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  rank: "normal",
+                  property: {
+                    id: "P92",
                     "data-type": "string"
                   },
-                  "value": {
-                    "content": "I am a goat",
-                    "type": "value"
+                  value: {
+                    content: "I am a goat",
+                    type: "value"
                   },
-                  "qualifiers": [],
-                  "references": []
+                  qualifiers: [],
+                  references: []
                 }
               ],
-              "additionalProp3": [
+              additionalProp3: [
                 {
-                  "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  "rank": "normal",
-                  "property": {
-                    "id": "P92",
+                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                  rank: "normal",
+                  property: {
+                    id: "P92",
                     "data-type": "string"
                   },
-                  "value": {
-                    "content": "I am a goat",
-                    "type": "value"
+                  value: {
+                    content: "I am a goat",
+                    type: "value"
                   },
-                  "qualifiers": [],
-                  "references": []
+                  qualifiers: [],
+                  references: []
                 }
               ]
             }
@@ -118,8 +121,8 @@ module WikidataAdaptor
           "/entities/items/#{item_id}",
           response_status: 400,
           response_body: {
-            "code": "invalid-item-id",
-            "message": "Not a valid item ID: {#{item_id}}"
+            code: "invalid-item-id",
+            message: "Not a valid item ID: {#{item_id}}"
           }
         )
       end
@@ -130,8 +133,8 @@ module WikidataAdaptor
           "/entities/items/#{item_id}",
           response_status: 404,
           response_body: {
-            "code": "item-not-found",
-            "message": "Could not find an item with the ID: {#{item_id}}"
+            code: "item-not-found",
+            message: "Could not find an item with the ID: {#{item_id}}"
           }
         )
       end
@@ -142,8 +145,8 @@ module WikidataAdaptor
           "/entities/items/#{item_id}",
           response_status: 500,
           response_body: {
-            "code": "unexpected-error",
-            "message": "Unexpected Error"
+            code: "unexpected-error",
+            message: "Unexpected Error"
           }
         )
       end
@@ -156,8 +159,8 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}/labels",
           response_body: {
-            "en": "Douglas Adams",
-            "fr": "Douglas Adams"
+            en: "Douglas Adams",
+            fr: "Douglas Adams"
           }
         )
       end
@@ -181,8 +184,8 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}/descriptions",
           response_body: {
-            "en": "English science fiction writer and humourist",
-            "fr": "écrivain de science-fiction et humoriste anglais"
+            en: "English science fiction writer and humourist",
+            fr: "écrivain de science-fiction et humoriste anglais"
           }
         )
       end
@@ -206,11 +209,11 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}/aliases",
           response_body: {
-            "en": [
+            en: [
               "Douglas Noel Adams",
               "Douglas Noël Adams"
             ],
-            "fr": [
+            fr: [
               "Douglas Noel Adams"
             ]
           }
@@ -239,52 +242,52 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}/statements",
           response_body: response_body || {
-            "additionalProp1": [
+            additionalProp1: [
               {
-                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                "rank": "normal",
-                "property": {
-                  "id": "P92",
+                id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                rank: "normal",
+                property: {
+                  id: "P92",
                   "data-type": "string"
                 },
-                "value": {
-                  "content": "I am a goat",
-                  "type": "value"
+                value: {
+                  content: "I am a goat",
+                  type: "value"
                 },
-                "qualifiers": [],
-                "references": []
+                qualifiers: [],
+                references: []
               }
             ],
-            "additionalProp2": [
+            additionalProp2: [
               {
-                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                "rank": "normal",
-                "property": {
-                  "id": "P92",
+                id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                rank: "normal",
+                property: {
+                  id: "P92",
                   "data-type": "string"
                 },
-                "value": {
-                  "content": "I am a goat",
-                  "type": "value"
+                value: {
+                  content: "I am a goat",
+                  type: "value"
                 },
-                "qualifiers": [],
-                "references": []
+                qualifiers: [],
+                references: []
               }
             ],
-            "additionalProp3": [
+            additionalProp3: [
               {
-                "id": "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                "rank": "normal",
-                "property": {
-                  "id": "P92",
+                id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
+                rank: "normal",
+                property: {
+                  id: "P92",
                   "data-type": "string"
                 },
-                "value": {
-                  "content": "I am a goat",
-                  "type": "value"
+                value: {
+                  content: "I am a goat",
+                  type: "value"
                 },
-                "qualifiers": [],
-                "references": []
+                qualifiers: [],
+                references: []
               }
             ]
           }
@@ -299,18 +302,18 @@ module WikidataAdaptor
           :get,
           "/entities/items/#{item_id}/statements/#{statement_id}",
           response_body: {
-            "id": "#{statement_id}",
-            "rank": "normal",
-            "property": {
-              "id": "P92",
+            id: statement_id.to_s,
+            rank: "normal",
+            property: {
+              id: "P92",
               "data-type": "string"
             },
-            "value": {
-              "content": "I am a goat",
-              "type": "value"
+            value: {
+              content: "I am a goat",
+              type: "value"
             },
-            "qualifiers": [],
-            "references": []
+            qualifiers: [],
+            references: []
           }
         )
       end
@@ -323,23 +326,23 @@ module WikidataAdaptor
           :get,
           "/statements/#{statement_id}",
           response_body: {
-            "id": "#{statement_id}",
-            "rank": "normal",
-            "property": {
-              "id": "P92",
+            id: statement_id.to_s,
+            rank: "normal",
+            property: {
+              id: "P92",
               "data-type": "string"
             },
-            "value": {
-              "content": "I am a goat",
-              "type": "value"
+            value: {
+              content: "I am a goat",
+              type: "value"
             },
-            "qualifiers": [],
-            "references": []
+            qualifiers: [],
+            references: []
           }
         )
       end
 
-    private
+      private
 
       def prepare_response(response_body, session)
         if response_body.is_a?(Hash)
