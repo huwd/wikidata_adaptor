@@ -4,13 +4,12 @@ require "webmock"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
-
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
 
       def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil, new_session: nil)
         with.merge!(headers: { WikidataAdaptor::RestApi::AUTH_HEADER_NAME => session }) if session
         session = nil if response_status >= 400
-        to_return = { status: response_status, body: response_body.merge(session: session).compact.to_json }
+        to_return = { status: response_status, body: prepare_response(response_body, session) }
         if with.empty?
           stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").to_return(**to_return)
         else
@@ -340,6 +339,15 @@ module WikidataAdaptor
         )
       end
 
+    private
+
+      def prepare_response(response_body, session)
+        if response_body.is_a?(Hash)
+          response_body.merge(session: session).compact.to_json
+        elsif response_body.is_a?(Array) || response_body.is_a?(String)
+          response_body
+        end
+      end
     end
   end
 end
