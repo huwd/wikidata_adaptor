@@ -67,7 +67,7 @@ module WikidataAdaptor
     # @param [String] The ID of the required Item.
     # @param [String] The requested resource language.
     #
-    # @return [String] Item's aliases in a specific language
+    # @return [Array[String]] Item's aliases in a specific language
     def get_item_alias(item_id, lang_code)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/aliases/#{lang_code}")
     end
