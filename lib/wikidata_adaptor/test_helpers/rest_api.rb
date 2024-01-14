@@ -8,8 +8,7 @@ module WikidataAdaptor
     module RestApi
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
 
-      def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil,
-                                new_session: nil)
+      def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil)
         with.merge!(headers: { WikidataAdaptor::RestApi::AUTH_HEADER_NAME => session }) if session
         session = nil if response_status >= 400
         to_return = { status: response_status, body: prepare_response(response_body, session) }
