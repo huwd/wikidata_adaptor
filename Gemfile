@@ -12,3 +12,4 @@ gem "rspec", "~> 3.0"
 gem "rubocop-rake"
 
 gem "rubocop", "~> 1.21"
+gem "dotenv", "2.8.1"
