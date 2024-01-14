@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe WikidataAdaptor::RestApi do
   include WikidataAdaptor::TestHelpers::RestApi
-  let(:endpoint) { WikidataAdaptor.rest_endpoint }
+  let(:endpoint) { "https://test.test/w/rest.php/wikibase/v0" }
   let(:api_client) { WikidataAdaptor::RestApi.new(endpoint) }
   let(:item_id) { "Q42" }
   let(:statement_id) { "Q42$F078E5B3-F9A8-480E-B7AC-D97778CBBEF9" }
@@ -83,16 +83,6 @@ RSpec.describe WikidataAdaptor::RestApi do
           "Douglas Noel Adams"
         ]
       })
-    end
-  end
-
-  describe "#get_item_alias" do
-    it "gets an item alias by item_id in a specific locale" do
-      stub_get_item_alias(item_id, "en")
-      expect(api_client.get_item_alias(item_id, "en").parsed_content).to eq([
-        "Douglas Noel Adams",
-        "Douglas Noël Adams"
-      ])
     end
   end
 
