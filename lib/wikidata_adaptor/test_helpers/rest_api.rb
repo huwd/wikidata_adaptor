@@ -363,6 +363,21 @@ module WikidataAdaptor
         )
       end
 
+      #####################################################
+      # GET /entities/items/:item_id/sitelinks/:site_id
+      #####################################################
+      def stub_get_item_sitelink(item_id, site_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/sitelinks/#{site_id}",
+          response_body: response_body || {
+            title: "Douglas Adams",
+            badges: [],
+            url: "https://en.wikipedia.org/wiki/Douglas_Adams"
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
