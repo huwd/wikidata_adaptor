@@ -17,6 +17,9 @@ jobs:
         ruby: ['3.2', '3.3', '3.4']
 
     steps:
+      - uses: actions/checkout@v5
+        with:
+          show-progress: false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -36,7 +39,7 @@ jobs:
         ruby: ['3.2', '3.3', '3.4']
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
