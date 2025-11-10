@@ -466,6 +466,20 @@ module WikidataAdaptor
         )
       end
 
+      ##############################################
+      # GET /entities/properties/:property_id/descriptions
+      ##############################################
+      def stub_get_property_descriptions(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/descriptions",
+          response_body: {
+            en: "that class of which this subject is a particular example and member",
+            fr: "classe dont ce sujet est un exemple particulier"
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)

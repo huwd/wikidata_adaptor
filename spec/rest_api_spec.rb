@@ -232,4 +232,14 @@ RSpec.describe WikidataAdaptor::RestApi do
       expect(api_client.get_property_label(property_id, "en").raw_response_body).to eq("instance of")
     end
   end
+
+  describe "#get_property_descriptions" do
+    it "gets property descriptions in all locales by property_id" do
+      stub_get_property_descriptions(property_id)
+      expect(api_client.get_property_descriptions(property_id).parsed_content).to eq({
+                                                                                       "en" => "that class of which this subject is a particular example and member",
+                                                                                       "fr" => "classe dont ce sujet est un exemple particulier"
+                                                                                     })
+    end
+  end
 end
