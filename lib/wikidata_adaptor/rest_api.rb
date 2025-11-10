@@ -119,5 +119,14 @@ module WikidataAdaptor
     def get_item_sitelink(item_id, site_id)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
     end
+
+    # Retrieve a single Wikibase Property by ID.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] A single Wikibase Property.
+    def get_property(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}")
+    end
   end
 end
