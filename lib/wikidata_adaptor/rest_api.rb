@@ -128,5 +128,14 @@ module WikidataAdaptor
     def get_property(property_id)
       get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}")
     end
+
+    # Retrieve a Property's labels.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] Property's labels by language.
+    def get_property_labels(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/labels")
+    end
   end
 end

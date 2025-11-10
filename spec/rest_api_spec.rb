@@ -215,4 +215,15 @@ RSpec.describe WikidataAdaptor::RestApi do
       expect { api_client.get_property(property_id) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#get_property_labels" do
+    it "gets property labels in all locales by property_id" do
+      stub_get_property_labels(property_id)
+      expect(api_client.get_property_labels(property_id).parsed_content).to eq({
+                                                                                 "en" => "instance of",
+                                                                                 "fr" => "est un(e)"
+                                                                               })
+    end
+  end
+
 end

@@ -441,6 +441,20 @@ module WikidataAdaptor
         )
       end
 
+      ###########################################
+      # GET /entities/properties/:property_id/labels
+      ###########################################
+      def stub_get_property_labels(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/labels",
+          response_body: {
+            en: "instance of",
+            fr: "est un(e)"
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
