@@ -194,5 +194,15 @@ module WikidataAdaptor
     def get_property_statements(property_id)
       get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/statements")
     end
+
+    # Retrieve a single Statement from a Property.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The ID of the required Statement.
+    #
+    # @return [Hash] A single Wikibase Statement.
+    def get_property_statement(property_id, statement_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/statements/#{statement_id}")
+    end
   end
 end

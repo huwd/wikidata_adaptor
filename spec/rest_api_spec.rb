@@ -275,4 +275,26 @@ RSpec.describe WikidataAdaptor::RestApi do
       expect(api_client.get_property_statements(property_id).parsed_content).to eq({ "P31" => [] })
     end
   end
+
+  describe "#get_property_statement" do
+    let(:property_statement_id) { "P31$11111111-2222-3333-4444-555555555555" }
+
+    it "returns a specific statement by property_id and statement_id" do
+      stub_get_property_statement(property_id, property_statement_id)
+      expect(api_client.get_property_statement(property_id, property_statement_id).parsed_content).to eq({
+                                                                                                           "id" => property_statement_id.to_s,
+                                                                                                           "rank" => "normal",
+                                                                                                           "property" => {
+                                                                                                             "id" => property_id.to_s,
+                                                                                                             "data-type" => "wikibase-item"
+                                                                                                           },
+                                                                                                           "value" => {
+                                                                                                             "content" => "Q5",
+                                                                                                             "type" => "value"
+                                                                                                           },
+                                                                                                           "qualifiers" => [],
+                                                                                                           "references" => []
+                                                                                                         })
+    end
+  end
 end

@@ -527,6 +527,30 @@ module WikidataAdaptor
         )
       end
 
+      ##################################################################
+      # GET /entities/properties/:property_id/statements/:statement_id
+      ##################################################################
+      def stub_get_property_statement(property_id, statement_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/statements/#{statement_id}",
+          response_body: {
+            id: statement_id.to_s,
+            rank: "normal",
+            property: {
+              id: property_id.to_s,
+              "data-type": "wikibase-item"
+            },
+            value: {
+              content: "Q5",
+              type: "value"
+            },
+            qualifiers: [],
+            references: []
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
