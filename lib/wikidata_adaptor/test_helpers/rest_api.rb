@@ -341,12 +341,225 @@ module WikidataAdaptor
         )
       end
 
+      ########################################
+      # GET /entities/items/:item_id/sitelinks
+      ########################################
+      def stub_get_item_sitelinks(item_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/sitelinks",
+          response_body: response_body || {
+            enwiki: {
+              title: "Douglas Adams",
+              badges: [],
+              url: "https://en.wikipedia.org/wiki/Douglas_Adams"
+            },
+            frwiki: {
+              title: "Douglas Adams",
+              badges: [],
+              url: "https://fr.wikipedia.org/wiki/Douglas_Adams"
+            }
+          }
+        )
+      end
+
+      #####################################################
+      # GET /entities/items/:item_id/sitelinks/:site_id
+      #####################################################
+      def stub_get_item_sitelink(item_id, site_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/items/#{item_id}/sitelinks/#{site_id}",
+          response_body: response_body || {
+            title: "Douglas Adams",
+            badges: [],
+            url: "https://en.wikipedia.org/wiki/Douglas_Adams"
+          }
+        )
+      end
+
+      ###############################
+      # GET /entities/properties/:property_id
+      ###############################
+      def stub_get_property(property_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}",
+          response_body: response_body || {
+            id: property_id.to_s,
+            type: "property",
+            labels: {
+              en: "instance of",
+              fr: "est un(e)"
+            },
+            descriptions: {
+              en: "that class of which this subject is a particular example and member",
+              fr: "classe dont ce sujet est un exemple particulier"
+            },
+            aliases: {
+              en: ["is a"],
+              fr: ["est un"]
+            },
+            statements: {}
+          }
+        )
+      end
+
+      def stub_get_property_invalid_property(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}",
+          response_status: 400,
+          response_body: {
+            code: "invalid-property-id",
+            message: "Not a valid property ID: {#{property_id}}"
+          }
+        )
+      end
+
+      def stub_get_property_not_found(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}",
+          response_status: 404,
+          response_body: {
+            code: "property-not-found",
+            message: "Could not find a property with the ID: {#{property_id}}"
+          }
+        )
+      end
+
+      def stub_get_property_unexpected_error(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}",
+          response_status: 500,
+          response_body: {
+            code: "unexpected-error",
+            message: "Unexpected Error"
+          }
+        )
+      end
+
+      ###########################################
+      # GET /entities/properties/:property_id/labels
+      ###########################################
+      def stub_get_property_labels(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/labels",
+          response_body: {
+            en: "instance of",
+            fr: "est un(e)"
+          }
+        )
+      end
+
+      ########################################################
+      # GET /entities/properties/:property_id/labels/:language_code
+      ########################################################
+      def stub_get_property_label(property_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/labels/#{language_code}",
+          response_body: "instance of"
+        )
+      end
+
+      ##############################################
+      # GET /entities/properties/:property_id/descriptions
+      ##############################################
+      def stub_get_property_descriptions(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/descriptions",
+          response_body: {
+            en: "that class of which this subject is a particular example and member",
+            fr: "classe dont ce sujet est un exemple particulier"
+          }
+        )
+      end
+
+      ################################################################
+      # GET /entities/properties/:property_id/descriptions/:language_code
+      ################################################################
+      def stub_get_property_description(property_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/descriptions/#{language_code}",
+          response_body: "that class of which this subject is a particular example and member"
+        )
+      end
+
+      ########################################
+      # GET /entities/properties/:property_id/aliases
+      ########################################
+      def stub_get_property_aliases(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/aliases",
+          response_body: {
+            en: ["is a"],
+            fr: ["est un"]
+          }
+        )
+      end
+
+      ########################################################
+      # GET /entities/properties/:property_id/aliases/:language_code
+      ########################################################
+      def stub_get_property_alias(property_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/aliases/#{language_code}",
+          response_body: ["is a"]
+        )
+      end
+
+      ############################################
+      # GET /entities/properties/:property_id/statements
+      ############################################
+      def stub_get_property_statements(property_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/statements",
+          response_body: response_body || {}
+        )
+      end
+
+      ##################################################################
+      # GET /entities/properties/:property_id/statements/:statement_id
+      ##################################################################
+      def stub_get_property_statement(property_id, statement_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/statements/#{statement_id}",
+          response_body: {
+            id: statement_id.to_s,
+            rank: "normal",
+            property: {
+              id: property_id.to_s,
+              "data-type": "wikibase-item"
+            },
+            value: {
+              content: "Q5",
+              type: "value"
+            },
+            qualifiers: [],
+            references: []
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
-        if response_body.is_a?(Hash)
+        case response_body
+        when Hash
           response_body.merge(session: session).compact.to_json
-        elsif response_body.is_a?(Array) || response_body.is_a?(String)
+        when Array
+          response_body.to_json
+        else # String or other
           response_body
         end
       end

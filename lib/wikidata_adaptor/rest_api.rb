@@ -100,5 +100,109 @@ module WikidataAdaptor
     def get_statement(statement_id)
       get_json("#{endpoint}/statements/#{statement_id}")
     end
+
+    # Retrieve an Item's sitelinks.
+    #
+    # @param [String] item_id The ID of the required Item.
+    #
+    # @return [Hash] Item's sitelinks by site ID.
+    def get_item_sitelinks(item_id)
+      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks")
+    end
+
+    # Retrieve an Item's sitelink for a specific site.
+    #
+    # @param [String] The ID of the required Item.
+    # @param [String] The site identifier (e.g., 'enwiki').
+    #
+    # @return [Hash] Item's sitelink for the given site.
+    def get_item_sitelink(item_id, site_id)
+      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
+    end
+
+    # Retrieve a single Wikibase Property by ID.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] A single Wikibase Property.
+    def get_property(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}")
+    end
+
+    # Retrieve a Property's labels.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] Property's labels by language.
+    def get_property_labels(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/labels")
+    end
+
+    # Retrieve a Property's label in a specific language.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The requested resource language.
+    #
+    # @return [Hash] Property's label in a specific language.
+    def get_property_label(property_id, lang_code)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/labels/#{lang_code}")
+    end
+
+    # Retrieve a Property's descriptions.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] Property's descriptions by language.
+    def get_property_descriptions(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions")
+    end
+
+    # Retrieve a Property's description in a specific language.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The requested resource language.
+    #
+    # @return [String] Property's description in a specific language.
+    def get_property_description(property_id, lang_code)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
+    end
+
+    # Retrieve a Property's aliases.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] Property's aliases by language.
+    def get_property_aliases(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases")
+    end
+
+    # Retrieve a Property's aliases in a specific language.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The requested resource language.
+    #
+    # @return [Array[String]] Property's aliases in a specific language
+    def get_property_alias(property_id, lang_code)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}")
+    end
+
+    # Retrieve Statements from a Property.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] The statements of a Property.
+    def get_property_statements(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/statements")
+    end
+
+    # Retrieve a single Statement from a Property.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The ID of the required Statement.
+    #
+    # @return [Hash] A single Wikibase Statement.
+    def get_property_statement(property_id, statement_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/statements/#{statement_id}")
+    end
   end
 end

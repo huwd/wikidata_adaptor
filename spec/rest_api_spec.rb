@@ -10,6 +10,7 @@ RSpec.describe WikidataAdaptor::RestApi do
   let(:api_client) { WikidataAdaptor::RestApi.new(endpoint) }
   let(:item_id) { "Q42" }
   let(:statement_id) { "Q42$F078E5B3-F9A8-480E-B7AC-D97778CBBEF9" }
+  let(:property_id) { "P31" }
 
   describe "#get_item" do
     let(:invalid_item_id) { "Bloop" }
@@ -141,6 +142,159 @@ RSpec.describe WikidataAdaptor::RestApi do
                                                                             "qualifiers" => [],
                                                                             "references" => []
                                                                           })
+    end
+  end
+
+  describe "#get_item_sitelinks" do
+    it "gets item sitelinks by item_id" do
+      stub_get_item_sitelinks(item_id)
+      expect(api_client.get_item_sitelinks(item_id).parsed_content).to eq({
+                                                                            "enwiki" => {
+                                                                              "title" => "Douglas Adams",
+                                                                              "badges" => [],
+                                                                              "url" => "https://en.wikipedia.org/wiki/Douglas_Adams"
+                                                                            },
+                                                                            "frwiki" => {
+                                                                              "title" => "Douglas Adams",
+                                                                              "badges" => [],
+                                                                              "url" => "https://fr.wikipedia.org/wiki/Douglas_Adams"
+                                                                            }
+                                                                          })
+    end
+
+    it "allows custom sitelinks response" do
+      stub_get_item_sitelinks(item_id, { "dewiki" => { "title" => "Douglas Adams", "badges" => [], "url" => "https://de.wikipedia.org/wiki/Douglas_Adams" } })
+      expect(api_client.get_item_sitelinks(item_id).parsed_content).to eq({
+                                                                            "dewiki" => { "title" => "Douglas Adams", "badges" => [], "url" => "https://de.wikipedia.org/wiki/Douglas_Adams" }
+                                                                          })
+    end
+  end
+
+  describe "#get_item_sitelink" do
+    let(:site_id) { "enwiki" }
+
+    it "gets a specific sitelink by item_id and site_id" do
+      stub_get_item_sitelink(item_id, site_id)
+      expect(api_client.get_item_sitelink(item_id, site_id).parsed_content).to eq({
+                                                                                    "title" => "Douglas Adams",
+                                                                                    "badges" => [],
+                                                                                    "url" => "https://en.wikipedia.org/wiki/Douglas_Adams"
+                                                                                  })
+    end
+
+    it "allows custom sitelink response" do
+      stub_get_item_sitelink(item_id, site_id, { "title" => "Douglas Adams", "badges" => [], "url" => "https://en.wikipedia.org/wiki/Douglas_Adams" })
+      expect(api_client.get_item_sitelink(item_id, site_id).parsed_content).to eq({
+                                                                                    "title" => "Douglas Adams",
+                                                                                    "badges" => [],
+                                                                                    "url" => "https://en.wikipedia.org/wiki/Douglas_Adams"
+                                                                                  })
+    end
+  end
+
+  describe "#get_property" do
+    it "gets a wikidata property based on the property's ID" do
+      stub_get_property(property_id)
+      expect(api_client.get_property(property_id).parsed_content.keys).to include(
+        "id", "type", "labels", "descriptions", "aliases", "statements"
+      )
+    end
+
+    it "raises a 400 response status for an invalid request" do
+      stub_get_property_invalid_property("BadProp")
+      expect { api_client.get_property("BadProp") }.to raise_error(ApiAdaptor::HTTPBadRequest)
+    end
+
+    it "raises a 404 response status if the property cannot be found" do
+      stub_get_property_not_found(property_id)
+      expect { api_client.get_property(property_id) }.to raise_error(ApiAdaptor::HTTPNotFound)
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_get_property_unexpected_error(property_id)
+      expect { api_client.get_property(property_id) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#get_property_labels" do
+    it "gets property labels in all locales by property_id" do
+      stub_get_property_labels(property_id)
+      expect(api_client.get_property_labels(property_id).parsed_content).to eq({
+                                                                                 "en" => "instance of",
+                                                                                 "fr" => "est un(e)"
+                                                                               })
+    end
+  end
+
+  describe "#get_property_label" do
+    it "gets a property label by property_id in a specific locale" do
+      stub_get_property_label(property_id, "en")
+      expect(api_client.get_property_label(property_id, "en").raw_response_body).to eq("instance of")
+    end
+  end
+
+  describe "#get_property_descriptions" do
+    it "gets property descriptions in all locales by property_id" do
+      stub_get_property_descriptions(property_id)
+      expect(api_client.get_property_descriptions(property_id).parsed_content).to eq({
+                                                                                       "en" => "that class of which this subject is a particular example and member",
+                                                                                       "fr" => "classe dont ce sujet est un exemple particulier"
+                                                                                     })
+    end
+  end
+
+  describe "#get_property_description" do
+    it "gets a property description by property_id in a specific locale" do
+      stub_get_property_description(property_id, "en")
+      expect(api_client.get_property_description(property_id, "en").raw_response_body).to eq(
+        "that class of which this subject is a particular example and member"
+      )
+    end
+  end
+
+  describe "#get_property_aliases" do
+    it "gets property aliases in all locales by property_id" do
+      stub_get_property_aliases(property_id)
+      expect(api_client.get_property_aliases(property_id).parsed_content).to eq({
+                                                                                  "en" => ["is a"],
+                                                                                  "fr" => ["est un"]
+                                                                                })
+    end
+  end
+
+  describe "#get_property_alias" do
+    it "gets property aliases in a specific locale" do
+      stub_get_property_alias(property_id, "en")
+      expect(api_client.get_property_alias(property_id, "en").parsed_content).to eq(["is a"])
+    end
+  end
+
+  describe "#get_property_statements" do
+    it "gets all the statements related to a property identified by property_id" do
+      stub_get_property_statements(property_id, { "P31" => [] })
+      expect(api_client.get_property_statements(property_id).parsed_content).to eq({ "P31" => [] })
+    end
+  end
+
+  describe "#get_property_statement" do
+    let(:property_statement_id) { "P31$11111111-2222-3333-4444-555555555555" }
+
+    it "returns a specific statement by property_id and statement_id" do
+      stub_get_property_statement(property_id, property_statement_id)
+      expect(api_client.get_property_statement(property_id, property_statement_id).parsed_content).to eq({
+                                                                                                           "id" => property_statement_id.to_s,
+                                                                                                           "rank" => "normal",
+                                                                                                           "property" => {
+                                                                                                             "id" => property_id.to_s,
+                                                                                                             "data-type" => "wikibase-item"
+                                                                                                           },
+                                                                                                           "value" => {
+                                                                                                             "content" => "Q5",
+                                                                                                             "type" => "value"
+                                                                                                           },
+                                                                                                           "qualifiers" => [],
+                                                                                                           "references" => []
+                                                                                                         })
     end
   end
 end
