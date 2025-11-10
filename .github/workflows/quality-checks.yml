@@ -9,8 +9,8 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
     name: Lint with RuboCop
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby
@@ -22,8 +22,8 @@ jobs:
         run: bundle exec rubocop
 
   unit-test:
-    runs-on: ubuntu-latest
     name: Unit tests with RSpec
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         ruby:
