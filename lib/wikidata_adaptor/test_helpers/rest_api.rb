@@ -554,9 +554,12 @@ module WikidataAdaptor
       private
 
       def prepare_response(response_body, session)
-        if response_body.is_a?(Hash)
+        case response_body
+        when Hash
           response_body.merge(session: session).compact.to_json
-        elsif response_body.is_a?(Array) || response_body.is_a?(String)
+        when Array
+          response_body.to_json
+        else # String or other
           response_body
         end
       end
