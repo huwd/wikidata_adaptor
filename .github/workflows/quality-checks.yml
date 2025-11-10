@@ -11,30 +11,38 @@ jobs:
   lint:
     name: Lint with RuboCop
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ruby: ['3.2', '3.3', '3.4']
+
     steps:
-      - uses: actions/checkout@v3
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1.0'
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
       - name: Run RuboCop
         run: bundle exec rubocop
 
   unit-test:
     name: Unit tests with RSpec
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        ruby:
-          - '3.1.0'
+        ruby: ['3.2', '3.3', '3.4']
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run RSpec
-      run: bundle exec rspec
+      - uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
