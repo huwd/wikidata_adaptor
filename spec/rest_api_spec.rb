@@ -268,4 +268,11 @@ RSpec.describe WikidataAdaptor::RestApi do
       expect(api_client.get_property_alias(property_id, "en").parsed_content).to eq(["is a"])
     end
   end
+
+  describe "#get_property_statements" do
+    it "gets all the statements related to a property identified by property_id" do
+      stub_get_property_statements(property_id, { "P31" => [] })
+      expect(api_client.get_property_statements(property_id).parsed_content).to eq({ "P31" => [] })
+    end
+  end
 end

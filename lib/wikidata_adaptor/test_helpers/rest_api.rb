@@ -516,6 +516,17 @@ module WikidataAdaptor
         )
       end
 
+      ############################################
+      # GET /entities/properties/:property_id/statements
+      ############################################
+      def stub_get_property_statements(property_id, response_body = nil)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/statements",
+          response_body: response_body || {}
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
