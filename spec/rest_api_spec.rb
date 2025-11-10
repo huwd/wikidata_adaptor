@@ -226,4 +226,10 @@ RSpec.describe WikidataAdaptor::RestApi do
     end
   end
 
+  describe "#get_property_label" do
+    it "gets a property label by property_id in a specific locale" do
+      stub_get_property_label(property_id, "en")
+      expect(api_client.get_property_label(property_id, "en").raw_response_body).to eq("instance of")
+    end
+  end
 end

@@ -455,6 +455,17 @@ module WikidataAdaptor
         )
       end
 
+      ########################################################
+      # GET /entities/properties/:property_id/labels/:language_code
+      ########################################################
+      def stub_get_property_label(property_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/labels/#{language_code}",
+          response_body: "instance of"
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
