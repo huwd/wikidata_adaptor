@@ -166,5 +166,14 @@ module WikidataAdaptor
     def get_property_description(property_id, lang_code)
       get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
     end
+
+    # Retrieve a Property's aliases.
+    #
+    # @param [String] The ID of the required Property.
+    #
+    # @return [Hash] Property's aliases by language.
+    def get_property_aliases(property_id)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases")
+    end
   end
 end

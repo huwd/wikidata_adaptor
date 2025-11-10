@@ -491,6 +491,20 @@ module WikidataAdaptor
         )
       end
 
+      ########################################
+      # GET /entities/properties/:property_id/aliases
+      ########################################
+      def stub_get_property_aliases(property_id)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/aliases",
+          response_body: {
+            en: ["is a"],
+            fr: ["est un"]
+          }
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)
