@@ -505,6 +505,17 @@ module WikidataAdaptor
         )
       end
 
+      ########################################################
+      # GET /entities/properties/:property_id/aliases/:language_code
+      ########################################################
+      def stub_get_property_alias(property_id, language_code)
+        stub_rest_api_request(
+          :get,
+          "/entities/properties/#{property_id}/aliases/#{language_code}",
+          response_body: ["is a"]
+        )
+      end
+
       private
 
       def prepare_response(response_body, session)

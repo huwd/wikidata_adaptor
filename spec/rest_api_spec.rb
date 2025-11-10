@@ -261,4 +261,11 @@ RSpec.describe WikidataAdaptor::RestApi do
                                                                                 })
     end
   end
+
+  describe "#get_property_alias" do
+    it "gets property aliases in a specific locale" do
+      stub_get_property_alias(property_id, "en")
+      expect(api_client.get_property_alias(property_id, "en").parsed_content).to eq(["is a"])
+    end
+  end
 end
