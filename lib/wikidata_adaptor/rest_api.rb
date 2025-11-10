@@ -157,5 +157,14 @@ module WikidataAdaptor
       get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions")
     end
 
+    # Retrieve a Property's description in a specific language.
+    #
+    # @param [String] The ID of the required Property.
+    # @param [String] The requested resource language.
+    #
+    # @return [String] Property's description in a specific language.
+    def get_property_description(property_id, lang_code)
+      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
+    end
   end
 end

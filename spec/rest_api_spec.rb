@@ -242,4 +242,13 @@ RSpec.describe WikidataAdaptor::RestApi do
                                                                                      })
     end
   end
+
+  describe "#get_property_description" do
+    it "gets a property description by property_id in a specific locale" do
+      stub_get_property_description(property_id, "en")
+      expect(api_client.get_property_description(property_id, "en").raw_response_body).to eq(
+        "that class of which this subject is a particular example and member"
+      )
+    end
+  end
 end
