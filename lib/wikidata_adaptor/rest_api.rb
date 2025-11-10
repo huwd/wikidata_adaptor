@@ -100,5 +100,14 @@ module WikidataAdaptor
     def get_statement(statement_id)
       get_json("#{endpoint}/statements/#{statement_id}")
     end
+
+    # Retrieve an Item's sitelinks.
+    #
+    # @param [String] item_id The ID of the required Item.
+    #
+    # @return [Hash] Item's sitelinks by site ID.
+    def get_item_sitelinks(item_id)
+      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks")
+    end
   end
 end

@@ -143,4 +143,29 @@ RSpec.describe WikidataAdaptor::RestApi do
                                                                           })
     end
   end
+
+  describe "#get_item_sitelinks" do
+    it "gets item sitelinks by item_id" do
+      stub_get_item_sitelinks(item_id)
+      expect(api_client.get_item_sitelinks(item_id).parsed_content).to eq({
+                                                                            "enwiki" => {
+                                                                              "title" => "Douglas Adams",
+                                                                              "badges" => [],
+                                                                              "url" => "https://en.wikipedia.org/wiki/Douglas_Adams"
+                                                                            },
+                                                                            "frwiki" => {
+                                                                              "title" => "Douglas Adams",
+                                                                              "badges" => [],
+                                                                              "url" => "https://fr.wikipedia.org/wiki/Douglas_Adams"
+                                                                            }
+                                                                          })
+    end
+
+    it "allows custom sitelinks response" do
+      stub_get_item_sitelinks(item_id, { "dewiki" => { "title" => "Douglas Adams", "badges" => [], "url" => "https://de.wikipedia.org/wiki/Douglas_Adams" } })
+      expect(api_client.get_item_sitelinks(item_id).parsed_content).to eq({
+                                                                            "dewiki" => { "title" => "Douglas Adams", "badges" => [], "url" => "https://de.wikipedia.org/wiki/Douglas_Adams" }
+                                                                          })
+    end
+  end
 end
