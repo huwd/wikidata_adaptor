@@ -6,6 +6,7 @@ require "spec_helper"
 
 RSpec.describe WikidataAdaptor::RestApi do
   include WikidataAdaptor::TestHelpers::RestApi
+
   let(:endpoint) { "https://test.test/w/rest.php/wikibase/v0" }
   let(:api_client) { WikidataAdaptor::RestApi.new(endpoint) }
   let(:item_id) { "Q42" }
