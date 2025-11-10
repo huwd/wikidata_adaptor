@@ -1,4 +1,4 @@
-name: Ruby
+name: Quality checks
 
 on:
   push:
@@ -8,9 +8,22 @@ on:
   pull_request:
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: Lint with RuboCop
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.0'
+          bundler-cache: true
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+  unit-test:
+    runs-on: ubuntu-latest
+    name: Unit tests with RSpec
     strategy:
       matrix:
         ruby:
@@ -23,5 +36,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Run RSpec
+      run: bundle exec rspec
