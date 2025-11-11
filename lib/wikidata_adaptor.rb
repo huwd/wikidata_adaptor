@@ -9,7 +9,7 @@ module WikidataAdaptor
   class Error < StandardError; end
 
   def self.rest_endpoint
-    ENV["WIKIBASE_REST_ENDPOINT"] || "https://wikidata.org/w/rest.php/wikibase/v0"
+    ENV["WIKIBASE_REST_ENDPOINT"] || "https://www.wikidata.org/w/rest.php/wikibase/v1"
   end
 
   # Creates a WikidataAdaptor::RestApi adapter
