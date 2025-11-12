@@ -13,23 +13,6 @@ RSpec.describe WikidataAdaptor::RestApi do
   let(:statement_id) { "Q42$F078E5B3-F9A8-480E-B7AC-D97778CBBEF9" }
   let(:property_id) { "P31" }
 
-  describe "#get_item_labels" do
-    it "gets item labels in all locales by item_id" do
-      stub_get_item_labels(item_id)
-      expect(api_client.get_item_labels(item_id).parsed_content).to eq({
-                                                                         "en" => "Douglas Adams",
-                                                                         "fr" => "Douglas Adams"
-                                                                       })
-    end
-  end
-
-  describe "#get_item_label" do
-    it "gets an item label by item_id in a specific locale" do
-      stub_get_item_label(item_id, "en")
-      expect(api_client.get_item_label(item_id, "en").raw_response_body).to eq("Douglas Adams")
-    end
-  end
-
   describe "#get_item_descriptions" do
     it "gets item descriptions in all locales by item_id" do
       stub_get_item_descriptions(item_id)

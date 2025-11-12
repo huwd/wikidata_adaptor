@@ -9,28 +9,11 @@ module WikidataAdaptor
     require_relative "rest_api/items"
     require_relative "rest_api/sitelinks"
     require_relative "rest_api/properties"
+    require_relative "rest_api/labels"
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
     include WikidataAdaptor::RestApi::Properties
-
-    # Retrieve an Item's labels.
-    #
-    # @param [String] The ID of the required Item.
-    #
-    # @return [Hash] Item's labels by language.
-    def get_item_labels(item_id)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/labels")
-    end
-
-    # Retrieve an Item's label in a specific language.
-    #
-    # @param [String] The ID of the required Item.
-    # @param [String] The requested resource language.
-    #
-    # @return [Hash] Item's label in a specific language.
-    def get_item_label(item_id, lang_code)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/labels/#{lang_code}")
-    end
+    include WikidataAdaptor::RestApi::Labels
 
     # Retrieve an Item's descriptions.
     #
@@ -116,25 +99,6 @@ module WikidataAdaptor
     # @return [Hash] Item's sitelink for the given site.
     def get_item_sitelink(item_id, site_id)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
-    end
-
-    # Retrieve a Property's labels.
-    #
-    # @param [String] The ID of the required Property.
-    #
-    # @return [Hash] Property's labels by language.
-    def get_property_labels(property_id)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/labels")
-    end
-
-    # Retrieve a Property's label in a specific language.
-    #
-    # @param [String] The ID of the required Property.
-    # @param [String] The requested resource language.
-    #
-    # @return [Hash] Property's label in a specific language.
-    def get_property_label(property_id, lang_code)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/labels/#{lang_code}")
     end
 
     # Retrieve a Property's descriptions.

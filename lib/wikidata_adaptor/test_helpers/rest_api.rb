@@ -9,9 +9,14 @@ module WikidataAdaptor
       require_relative "rest_api/items"
       require_relative "rest_api/sitelinks"
       require_relative "rest_api/properties"
+      require_relative "rest_api/labels"
+      require_relative "rest_api/descriptions"
+      include WikidataAdaptor::TestHelpers::RestApi::Labels
       include WikidataAdaptor::TestHelpers::RestApi::Items
       include WikidataAdaptor::TestHelpers::RestApi::Sitelinks
       include WikidataAdaptor::TestHelpers::RestApi::Properties
+      include WikidataAdaptor::TestHelpers::RestApi::Labels
+      include WikidataAdaptor::TestHelpers::RestApi::Descriptions
 
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
 
@@ -24,31 +29,6 @@ module WikidataAdaptor
         else
           stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").with(**with).to_return(**to_return)
         end
-      end
-
-      #####################################
-      # GET /entities/items/:item_id/labels
-      #####################################
-      def stub_get_item_labels(item_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}/labels",
-          response_body: {
-            en: "Douglas Adams",
-            fr: "Douglas Adams"
-          }
-        )
-      end
-
-      ####################################################
-      # GET /entities/items/:item_id/labels/:language_code
-      ####################################################
-      def stub_get_item_label(item_id, language_code)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}/labels/#{language_code}",
-          response_body: "Douglas Adams"
-        )
       end
 
       ###########################################
@@ -214,31 +194,6 @@ module WikidataAdaptor
             qualifiers: [],
             references: []
           }
-        )
-      end
-
-      ###########################################
-      # GET /entities/properties/:property_id/labels
-      ###########################################
-      def stub_get_property_labels(property_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/properties/#{property_id}/labels",
-          response_body: {
-            en: "instance of",
-            fr: "est un(e)"
-          }
-        )
-      end
-
-      ########################################################
-      # GET /entities/properties/:property_id/labels/:language_code
-      ########################################################
-      def stub_get_property_label(property_id, language_code)
-        stub_rest_api_request(
-          :get,
-          "/entities/properties/#{property_id}/labels/#{language_code}",
-          response_body: "instance of"
         )
       end
 
