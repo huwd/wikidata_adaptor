@@ -6,14 +6,8 @@
 module WikidataAdaptor
   # Wikidata REST API class
   class RestApi < ApiAdaptor::Base
-    # Retrieve a single Wikibase Item by ID.
-    #
-    # @param [String] The ID of the required Item.
-    #
-    # @return [Hash] A single Wikibase Item.
-    def get_item(item_id)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}")
-    end
+    require_relative "rest_api/items"
+    include WikidataAdaptor::RestApi::Items
 
     # Retrieve an Item's labels.
     #

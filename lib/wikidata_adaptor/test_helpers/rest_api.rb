@@ -6,6 +6,9 @@ require "webmock"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      require_relative "rest_api/items"
+      include WikidataAdaptor::TestHelpers::RestApi::Items
+
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
 
       def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil)
@@ -17,137 +20,6 @@ module WikidataAdaptor
         else
           stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").with(**with).to_return(**to_return)
         end
-      end
-
-      ###############################
-      # GET /entities/items/:item_id
-      ###############################
-      def stub_get_item(item_id, response_body = nil)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}",
-          response_body: response_body || {
-            id: item_id.to_s,
-            type: "item",
-            labels: {
-              en: "Douglas Adams",
-              fr: "Douglas Adams"
-            },
-            descriptions: {
-              en: "English science fiction writer and humourist",
-              fr: "écrivain de science-fiction et humoriste anglais"
-            },
-            aliases: {
-              en: [
-                "Douglas Noel Adams",
-                "Douglas Noël Adams"
-              ],
-              fr: [
-                "Douglas Noel Adams"
-              ]
-            },
-            sitelinks: {
-              afwiki: {
-                title: "Douglas Adams",
-                badges: [
-                  "Q17437798"
-                ],
-                url: "https://af.wikipedia.org/wiki/Douglas_Adams"
-              },
-              arwiki: {
-                title: "دوغلاس آدمز",
-                badges: [],
-                url: "https://ar.wikipedia.org/wiki/%D8%AF%D9%88%D8%BA%D9%84%D8%A7%D8%B3_%D8%A2%D8%AF%D9%85%D8%B2"
-              }
-            },
-            statements: {
-              additionalProp1: [
-                {
-                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  rank: "normal",
-                  property: {
-                    id: "P92",
-                    "data-type": "string"
-                  },
-                  value: {
-                    content: "I am a goat",
-                    type: "value"
-                  },
-                  qualifiers: [],
-                  references: []
-                }
-              ],
-              additionalProp2: [
-                {
-                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  rank: "normal",
-                  property: {
-                    id: "P92",
-                    "data-type": "string"
-                  },
-                  value: {
-                    content: "I am a goat",
-                    type: "value"
-                  },
-                  qualifiers: [],
-                  references: []
-                }
-              ],
-              additionalProp3: [
-                {
-                  id: "Q11$6403c562-401a-2b26-85cc-8327801145e1",
-                  rank: "normal",
-                  property: {
-                    id: "P92",
-                    "data-type": "string"
-                  },
-                  value: {
-                    content: "I am a goat",
-                    type: "value"
-                  },
-                  qualifiers: [],
-                  references: []
-                }
-              ]
-            }
-          }
-        )
-      end
-
-      def stub_get_item_invalid_item(item_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}",
-          response_status: 400,
-          response_body: {
-            code: "invalid-item-id",
-            message: "Not a valid item ID: {#{item_id}}"
-          }
-        )
-      end
-
-      def stub_get_item_not_found(item_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}",
-          response_status: 404,
-          response_body: {
-            code: "item-not-found",
-            message: "Could not find an item with the ID: {#{item_id}}"
-          }
-        )
-      end
-
-      def stub_get_item_unexpected_error(item_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}",
-          response_status: 500,
-          response_body: {
-            code: "unexpected-error",
-            message: "Unexpected Error"
-          }
-        )
       end
 
       #####################################
