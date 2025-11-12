@@ -11,30 +11,13 @@ module WikidataAdaptor
     require_relative "rest_api/properties"
     require_relative "rest_api/labels"
     require_relative "rest_api/descriptions"
+    require_relative "rest_api/aliases"
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
     include WikidataAdaptor::RestApi::Properties
     include WikidataAdaptor::RestApi::Labels
     include WikidataAdaptor::RestApi::Descriptions
-
-    # Retrieve an Item's aliases.
-    #
-    # @param [String] The ID of the required Item.
-    #
-    # @return [Hash] Item's aliases by language.
-    def get_item_aliases(item_id)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/aliases")
-    end
-
-    # Retrieve an Item's aliases in a specific language.
-    #
-    # @param [String] The ID of the required Item.
-    # @param [String] The requested resource language.
-    #
-    # @return [Array[String]] Item's aliases in a specific language
-    def get_item_alias(item_id, lang_code)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/aliases/#{lang_code}")
-    end
+    include WikidataAdaptor::RestApi::Aliases
 
     # Retrieve Statements from an Item.
     #
@@ -82,25 +65,6 @@ module WikidataAdaptor
     # @return [Hash] Item's sitelink for the given site.
     def get_item_sitelink(item_id, site_id)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
-    end
-
-    # Retrieve a Property's aliases.
-    #
-    # @param [String] The ID of the required Property.
-    #
-    # @return [Hash] Property's aliases by language.
-    def get_property_aliases(property_id)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases")
-    end
-
-    # Retrieve a Property's aliases in a specific language.
-    #
-    # @param [String] The ID of the required Property.
-    # @param [String] The requested resource language.
-    #
-    # @return [Array[String]] Property's aliases in a specific language
-    def get_property_alias(property_id, lang_code)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}")
     end
 
     # Retrieve Statements from a Property.
