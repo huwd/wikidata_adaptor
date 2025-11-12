@@ -6,12 +6,13 @@ require "webmock"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      require_relative "rest_api/aliases"
       require_relative "rest_api/items"
       require_relative "rest_api/sitelinks"
       require_relative "rest_api/properties"
       require_relative "rest_api/labels"
       require_relative "rest_api/descriptions"
-      include WikidataAdaptor::TestHelpers::RestApi::Labels
+      include WikidataAdaptor::TestHelpers::RestApi::Aliases
       include WikidataAdaptor::TestHelpers::RestApi::Items
       include WikidataAdaptor::TestHelpers::RestApi::Sitelinks
       include WikidataAdaptor::TestHelpers::RestApi::Properties
@@ -29,39 +30,6 @@ module WikidataAdaptor
         else
           stub_request(method, "#{WIKIBASE_REST_ENDPOINT}#{path}").with(**with).to_return(**to_return)
         end
-      end
-
-      ######################################
-      # GET /entities/items/:item_id/aliases
-      ######################################
-      def stub_get_item_aliases(item_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}/aliases",
-          response_body: {
-            en: [
-              "Douglas Noel Adams",
-              "Douglas Noël Adams"
-            ],
-            fr: [
-              "Douglas Noel Adams"
-            ]
-          }
-        )
-      end
-
-      #####################################################
-      # GET /entities/items/:item_id/aliases/:language_code
-      #####################################################
-      def stub_get_item_alias(item_id, language_code)
-        stub_rest_api_request(
-          :get,
-          "/entities/items/#{item_id}/aliases/#{language_code}",
-          response_body: [
-            "Douglas Noel Adams",
-            "Douglas Noël Adams"
-          ]
-        )
       end
 
       #########################################
@@ -169,31 +137,6 @@ module WikidataAdaptor
             qualifiers: [],
             references: []
           }
-        )
-      end
-
-      ########################################
-      # GET /entities/properties/:property_id/aliases
-      ########################################
-      def stub_get_property_aliases(property_id)
-        stub_rest_api_request(
-          :get,
-          "/entities/properties/#{property_id}/aliases",
-          response_body: {
-            en: ["is a"],
-            fr: ["est un"]
-          }
-        )
-      end
-
-      ########################################################
-      # GET /entities/properties/:property_id/aliases/:language_code
-      ########################################################
-      def stub_get_property_alias(property_id, language_code)
-        stub_rest_api_request(
-          :get,
-          "/entities/properties/#{property_id}/aliases/#{language_code}",
-          response_body: ["is a"]
         )
       end
 
