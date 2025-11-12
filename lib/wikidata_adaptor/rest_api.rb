@@ -10,29 +10,12 @@ module WikidataAdaptor
     require_relative "rest_api/sitelinks"
     require_relative "rest_api/properties"
     require_relative "rest_api/labels"
+    require_relative "rest_api/descriptions"
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
     include WikidataAdaptor::RestApi::Properties
     include WikidataAdaptor::RestApi::Labels
-
-    # Retrieve an Item's descriptions.
-    #
-    # @param [String] The ID of the required Item.
-    #
-    # @return [Hash] Item's descriptions by language.
-    def get_item_descriptions(item_id)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/descriptions")
-    end
-
-    # Retrieve an Item's description in a specific language.
-    #
-    # @param [String] The ID of the required Item.
-    # @param [String] The requested resource language.
-    #
-    # @return [String] Item's description in a specific language.
-    def get_item_description(item_id, lang_code)
-      get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/descriptions/#{lang_code}")
-    end
+    include WikidataAdaptor::RestApi::Descriptions
 
     # Retrieve an Item's aliases.
     #
@@ -99,25 +82,6 @@ module WikidataAdaptor
     # @return [Hash] Item's sitelink for the given site.
     def get_item_sitelink(item_id, site_id)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
-    end
-
-    # Retrieve a Property's descriptions.
-    #
-    # @param [String] The ID of the required Property.
-    #
-    # @return [Hash] Property's descriptions by language.
-    def get_property_descriptions(property_id)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions")
-    end
-
-    # Retrieve a Property's description in a specific language.
-    #
-    # @param [String] The ID of the required Property.
-    # @param [String] The requested resource language.
-    #
-    # @return [String] Property's description in a specific language.
-    def get_property_description(property_id, lang_code)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
     end
 
     # Retrieve a Property's aliases.
