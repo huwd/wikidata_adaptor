@@ -7,7 +7,9 @@ module WikidataAdaptor
   # Wikidata REST API class
   class RestApi < ApiAdaptor::Base
     require_relative "rest_api/items"
+    require_relative "rest_api/sitelinks"
     include WikidataAdaptor::RestApi::Items
+    include WikidataAdaptor::RestApi::Sitelinks
 
     # Retrieve an Item's labels.
     #
