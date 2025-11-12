@@ -120,30 +120,6 @@ RSpec.describe WikidataAdaptor::RestApi do
     end
   end
 
-  describe "#get_property" do
-    it "gets a wikidata property based on the property's ID" do
-      stub_get_property(property_id)
-      expect(api_client.get_property(property_id).parsed_content.keys).to include(
-        "id", "type", "labels", "descriptions", "aliases", "statements"
-      )
-    end
-
-    it "raises a 400 response status for an invalid request" do
-      stub_get_property_invalid_property("BadProp")
-      expect { api_client.get_property("BadProp") }.to raise_error(ApiAdaptor::HTTPBadRequest)
-    end
-
-    it "raises a 404 response status if the property cannot be found" do
-      stub_get_property_not_found(property_id)
-      expect { api_client.get_property(property_id) }.to raise_error(ApiAdaptor::HTTPNotFound)
-    end
-
-    it "raises a 500 response status if there's an unexpected error" do
-      stub_get_property_unexpected_error(property_id)
-      expect { api_client.get_property(property_id) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
-    end
-  end
-
   describe "#get_property_labels" do
     it "gets property labels in all locales by property_id" do
       stub_get_property_labels(property_id)

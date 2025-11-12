@@ -8,8 +8,10 @@ module WikidataAdaptor
   class RestApi < ApiAdaptor::Base
     require_relative "rest_api/items"
     require_relative "rest_api/sitelinks"
+    require_relative "rest_api/properties"
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
+    include WikidataAdaptor::RestApi::Properties
 
     # Retrieve an Item's labels.
     #
@@ -114,15 +116,6 @@ module WikidataAdaptor
     # @return [Hash] Item's sitelink for the given site.
     def get_item_sitelink(item_id, site_id)
       get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
-    end
-
-    # Retrieve a single Wikibase Property by ID.
-    #
-    # @param [String] The ID of the required Property.
-    #
-    # @return [Hash] A single Wikibase Property.
-    def get_property(property_id)
-      get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}")
     end
 
     # Retrieve a Property's labels.
