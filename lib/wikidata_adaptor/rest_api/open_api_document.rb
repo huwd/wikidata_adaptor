@@ -8,7 +8,7 @@ module WikidataAdaptor
       #
       # @return [Hash] The OpenAPI document.
       def get_openapi_document
-        get_json("#{endpoint}/openapi.json")
+        get_json("#{endpoint}/v1/openapi.json")
       end
     end
   end

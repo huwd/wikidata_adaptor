@@ -7,7 +7,7 @@ require "spec_helper"
 RSpec.describe WikidataAdaptor::RestApi::OpenApiDocument do
   include WikidataAdaptor::TestHelpers::RestApi
 
-  let(:endpoint) { "https://test.test/w/rest.php/wikibase/v0" }
+  let(:endpoint) { "https://test.test/w/rest.php/wikibase" }
   let(:api_client) { WikidataAdaptor::RestApi.new(endpoint) }
 
   describe "#get_openapi_document" do

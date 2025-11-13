@@ -5,12 +5,12 @@ module WikidataAdaptor
     module RestApi
       module Properties
         ###############################
-        # GET /entities/properties/:property_id
+        # GET /v1/entities/properties/:property_id
         ###############################
         def stub_get_property(property_id, response_body = nil)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}",
+            "/v1/entities/properties/#{property_id}",
             response_body: response_body || {
               id: property_id.to_s,
               type: "property",
@@ -34,7 +34,7 @@ module WikidataAdaptor
         def stub_get_property_invalid_property(property_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}",
+            "/v1/entities/properties/#{property_id}",
             response_status: 400,
             response_body: {
               code: "invalid-property-id",
@@ -46,7 +46,7 @@ module WikidataAdaptor
         def stub_get_property_not_found(property_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}",
+            "/v1/entities/properties/#{property_id}",
             response_status: 404,
             response_body: {
               code: "property-not-found",
@@ -58,7 +58,7 @@ module WikidataAdaptor
         def stub_get_property_unexpected_error(property_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}",
+            "/v1/entities/properties/#{property_id}",
             response_status: 500,
             response_body: {
               code: "unexpected-error",

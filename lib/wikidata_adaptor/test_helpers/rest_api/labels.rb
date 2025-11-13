@@ -5,12 +5,12 @@ module WikidataAdaptor
     module RestApi
       module Labels
         #####################################
-        # GET /entities/items/:item_id/labels
+        # GET /v1/entities/items/:item_id/labels
         #####################################
         def stub_get_item_labels(item_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/labels",
+            "/v1/entities/items/#{item_id}/labels",
             response_body: {
               en: "Douglas Adams",
               fr: "Douglas Adams"
@@ -19,23 +19,23 @@ module WikidataAdaptor
         end
 
         ####################################################
-        # GET /entities/items/:item_id/labels/:language_code
+        # GET /v1/entities/items/:item_id/labels/:language_code
         ####################################################
         def stub_get_item_label(item_id, language_code)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/labels/#{language_code}",
+            "/v1/entities/items/#{item_id}/labels/#{language_code}",
             response_body: "Douglas Adams"
           )
         end
 
         ###########################################
-        # GET /entities/properties/:property_id/labels
+        # GET /v1/entities/properties/:property_id/labels
         ###########################################
         def stub_get_property_labels(property_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/labels",
+            "/v1/entities/properties/#{property_id}/labels",
             response_body: {
               en: "instance of",
               fr: "est un(e)"
@@ -44,12 +44,12 @@ module WikidataAdaptor
         end
 
         ########################################################
-        # GET /entities/properties/:property_id/labels/:language_code
+        # GET /v1/entities/properties/:property_id/labels/:language_code
         ########################################################
         def stub_get_property_label(property_id, language_code)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/labels/#{language_code}",
+            "/v1/entities/properties/#{property_id}/labels/#{language_code}",
             response_body: "instance of"
           )
         end

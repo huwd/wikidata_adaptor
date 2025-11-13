@@ -10,7 +10,7 @@ module WikidataAdaptor
       #
       # @return [Hash] A single Wikibase Property.
       def get_property(property_id)
-        get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}")
+        get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}")
       end
     end
   end

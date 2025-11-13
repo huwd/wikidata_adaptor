@@ -5,12 +5,12 @@ module WikidataAdaptor
     module RestApi
       module Statements
         #########################################
-        # GET /entities/items/:item_id/statements
+        # GET /v1/entities/items/:item_id/statements
         #########################################
         def stub_get_item_statements(item_id, response_body = nil)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/statements",
+            "/v1/entities/items/#{item_id}/statements",
             response_body: response_body || {
               additionalProp1: [
                 {
@@ -27,12 +27,12 @@ module WikidataAdaptor
         end
 
         ########################################################
-        # GET /entities/items/:item_id/statements/:statement_id
+        # GET /v1/entities/items/:item_id/statements/:statement_id
         ########################################################
         def stub_get_item_statement(item_id, statement_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/statements/#{statement_id}",
+            "/v1/entities/items/#{item_id}/statements/#{statement_id}",
             response_body: {
               id: statement_id.to_s,
               rank: "normal",
@@ -45,12 +45,12 @@ module WikidataAdaptor
         end
 
         ###############################
-        # GET /statements/:statement_id
+        # GET /v1/statements/:statement_id
         ###############################
         def stub_get_statement(statement_id)
           stub_rest_api_request(
             :get,
-            "/statements/#{statement_id}",
+            "/v1/statements/#{statement_id}",
             response_body: {
               id: statement_id.to_s,
               rank: "normal",
@@ -63,23 +63,23 @@ module WikidataAdaptor
         end
 
         ############################################
-        # GET /entities/properties/:property_id/statements
+        # GET /v1/entities/properties/:property_id/statements
         ############################################
         def stub_get_property_statements(property_id, response_body = nil)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/statements",
+            "/v1/entities/properties/#{property_id}/statements",
             response_body: response_body || {}
           )
         end
 
         ##################################################################
-        # GET /entities/properties/:property_id/statements/:statement_id
+        # GET /v1/entities/properties/:property_id/statements/:statement_id
         ##################################################################
         def stub_get_property_statement(property_id, statement_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/statements/#{statement_id}",
+            "/v1/entities/properties/#{property_id}/statements/#{statement_id}",
             response_body: {
               id: statement_id.to_s,
               rank: "normal",

@@ -25,7 +25,7 @@ module WikidataAdaptor
       include WikidataAdaptor::TestHelpers::RestApi::Statements
       include WikidataAdaptor::TestHelpers::RestApi::PropertyDataTypes
 
-      WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase/v0"
+      WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase"
 
       def stub_rest_api_request(method, path, with: {}, response_status: 200, response_body: {}, session: nil)
         with.merge!(headers: { WikidataAdaptor::RestApi::AUTH_HEADER_NAME => session }) if session
