@@ -6,6 +6,7 @@ require "webmock"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      require_relative "rest_api/open_api_document"
       require_relative "rest_api/aliases"
       require_relative "rest_api/items"
       require_relative "rest_api/sitelinks"
@@ -13,6 +14,7 @@ module WikidataAdaptor
       require_relative "rest_api/labels"
       require_relative "rest_api/descriptions"
       require_relative "rest_api/statements"
+      include WikidataAdaptor::TestHelpers::RestApi::OpenApiDocument
       include WikidataAdaptor::TestHelpers::RestApi::Aliases
       include WikidataAdaptor::TestHelpers::RestApi::Items
       include WikidataAdaptor::TestHelpers::RestApi::Sitelinks

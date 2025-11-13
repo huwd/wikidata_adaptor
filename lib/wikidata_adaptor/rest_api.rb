@@ -6,6 +6,7 @@
 module WikidataAdaptor
   # Wikidata REST API class
   class RestApi < ApiAdaptor::Base
+    require_relative "rest_api/open_api_document"
     require_relative "rest_api/items"
     require_relative "rest_api/sitelinks"
     require_relative "rest_api/properties"
@@ -13,6 +14,7 @@ module WikidataAdaptor
     require_relative "rest_api/descriptions"
     require_relative "rest_api/aliases"
     require_relative "rest_api/statements"
+    include WikidataAdaptor::RestApi::OpenApiDocument
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
     include WikidataAdaptor::RestApi::Properties
