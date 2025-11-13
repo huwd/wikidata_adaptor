@@ -15,6 +15,7 @@ module WikidataAdaptor
       require_relative "rest_api/descriptions"
       require_relative "rest_api/statements"
       require_relative "rest_api/property_data_types"
+      require_relative "rest_api/search_item"
       include WikidataAdaptor::TestHelpers::RestApi::OpenApiDocument
       include WikidataAdaptor::TestHelpers::RestApi::Aliases
       include WikidataAdaptor::TestHelpers::RestApi::Items
@@ -24,6 +25,7 @@ module WikidataAdaptor
       include WikidataAdaptor::TestHelpers::RestApi::Descriptions
       include WikidataAdaptor::TestHelpers::RestApi::Statements
       include WikidataAdaptor::TestHelpers::RestApi::PropertyDataTypes
+      include WikidataAdaptor::TestHelpers::RestApi::SearchItem
 
       WIKIBASE_REST_ENDPOINT = ENV["WIKIBASE_REST_ENDPOINT"] || "https://test.test/w/rest.php/wikibase"
 

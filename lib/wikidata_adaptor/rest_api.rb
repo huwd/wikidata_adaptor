@@ -15,6 +15,7 @@ module WikidataAdaptor
     require_relative "rest_api/aliases"
     require_relative "rest_api/statements"
     require_relative "rest_api/property_data_types"
+    require_relative "rest_api/search_item"
     include WikidataAdaptor::RestApi::OpenApiDocument
     include WikidataAdaptor::RestApi::Items
     include WikidataAdaptor::RestApi::Sitelinks
@@ -24,5 +25,6 @@ module WikidataAdaptor
     include WikidataAdaptor::RestApi::Aliases
     include WikidataAdaptor::RestApi::Statements
     include WikidataAdaptor::RestApi::PropertyDataTypes
+    include WikidataAdaptor::RestApi::SearchItem
   end
 end
