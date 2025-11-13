@@ -18,3 +18,6 @@ Metrics:
 
 Style/Documentation:
   Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
