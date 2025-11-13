@@ -5,12 +5,12 @@ module WikidataAdaptor
     module RestApi
       module Aliases
         ######################################
-        # GET /entities/items/:item_id/aliases
+        # GET /v1/entities/items/:item_id/aliases
         ######################################
         def stub_get_item_aliases(item_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/aliases",
+            "/v1/entities/items/#{item_id}/aliases",
             response_body: {
               en: [
                 "Douglas Noel Adams",
@@ -24,12 +24,12 @@ module WikidataAdaptor
         end
 
         #####################################################
-        # GET /entities/items/:item_id/aliases/:language_code
+        # GET /v1/entities/items/:item_id/aliases/:language_code
         #####################################################
         def stub_get_item_alias(item_id, language_code)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}/aliases/#{language_code}",
+            "/v1/entities/items/#{item_id}/aliases/#{language_code}",
             response_body: [
               "Douglas Noel Adams",
               "Douglas Noël Adams"
@@ -38,12 +38,12 @@ module WikidataAdaptor
         end
 
         ########################################
-        # GET /entities/properties/:property_id/aliases
+        # GET /v1/entities/properties/:property_id/aliases
         ########################################
         def stub_get_property_aliases(property_id)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/aliases",
+            "/v1/entities/properties/#{property_id}/aliases",
             response_body: {
               en: ["is a"],
               fr: ["est un"]
@@ -52,12 +52,12 @@ module WikidataAdaptor
         end
 
         ########################################################
-        # GET /entities/properties/:property_id/aliases/:language_code
+        # GET /v1/entities/properties/:property_id/aliases/:language_code
         ########################################################
         def stub_get_property_alias(property_id, language_code)
           stub_rest_api_request(
             :get,
-            "/entities/properties/#{property_id}/aliases/#{language_code}",
+            "/v1/entities/properties/#{property_id}/aliases/#{language_code}",
             response_body: ["is a"]
           )
         end

@@ -10,7 +10,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Item's descriptions by language.
       def get_item_descriptions(item_id)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/descriptions")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/descriptions")
       end
 
       # Retrieve an Item's description in a specific language.
@@ -20,7 +20,7 @@ module WikidataAdaptor
       #
       # @return [String] Item's description in a specific language.
       def get_item_description(item_id, lang_code)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/descriptions/#{lang_code}")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/descriptions/#{lang_code}")
       end
 
       # Retrieve a Property's descriptions.
@@ -29,7 +29,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Property's descriptions by language.
       def get_property_descriptions(property_id)
-        get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions")
+        get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions")
       end
 
       # Retrieve a Property's description in a specific language.
@@ -39,7 +39,7 @@ module WikidataAdaptor
       #
       # @return [String] Property's description in a specific language.
       def get_property_description(property_id, lang_code)
-        get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
+        get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}")
       end
     end
   end

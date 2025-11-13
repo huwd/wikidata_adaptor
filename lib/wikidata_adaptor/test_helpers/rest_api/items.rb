@@ -5,12 +5,12 @@ module WikidataAdaptor
     module RestApi
       module Items
         ###############################
-        # GET /entities/items/:item_id
+        # GET /v1/entities/items/:item_id
         ###############################
         def stub_get_item(item_id, response_body = nil)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}",
+            "/v1/entities/items/#{item_id}",
             response_body: response_body || {
               id: item_id.to_s,
               type: "item",
@@ -35,7 +35,7 @@ module WikidataAdaptor
         def stub_get_item_invalid_item(item_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}",
+            "/v1/entities/items/#{item_id}",
             response_status: 400,
             response_body: {
               code: "invalid-item-id",
@@ -47,7 +47,7 @@ module WikidataAdaptor
         def stub_get_item_not_found(item_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}",
+            "/v1/entities/items/#{item_id}",
             response_status: 404,
             response_body: {
               code: "item-not-found",
@@ -59,7 +59,7 @@ module WikidataAdaptor
         def stub_get_item_unexpected_error(item_id)
           stub_rest_api_request(
             :get,
-            "/entities/items/#{item_id}",
+            "/v1/entities/items/#{item_id}",
             response_status: 500,
             response_body: {
               code: "unexpected-error",

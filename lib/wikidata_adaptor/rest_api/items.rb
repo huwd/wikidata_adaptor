@@ -10,7 +10,7 @@ module WikidataAdaptor
       #
       # @return [Hash] A single Wikibase Item.
       def get_item(item_id)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}")
       end
     end
   end

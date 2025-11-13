@@ -10,7 +10,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Item's sitelinks by site ID.
       def get_item_sitelinks(item_id)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks")
       end
 
       # Retrieve an Item's sitelink for a specific site.
@@ -20,7 +20,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Item's sitelink for the given site.
       def get_item_sitelink(item_id, site_id)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
       end
     end
   end

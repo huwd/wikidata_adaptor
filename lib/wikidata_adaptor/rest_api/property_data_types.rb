@@ -8,7 +8,7 @@ module WikidataAdaptor
       #
       # @return [Hash] The map of Property data types to value types
       def get_property_data_types
-        get_json("#{endpoint}/property-data-types")
+        get_json("#{endpoint}/v1/property-data-types")
       end
     end
   end

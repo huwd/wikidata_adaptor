@@ -10,7 +10,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Item's aliases by language.
       def get_item_aliases(item_id)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/aliases")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/aliases")
       end
 
       # Retrieve an Item's alias in a specific language.
@@ -20,7 +20,7 @@ module WikidataAdaptor
       #
       # @return [Array[String]] Item's alias in a specific language.
       def get_item_alias(item_id, lang_code)
-        get_json("#{endpoint}/entities/items/#{CGI.escape(item_id)}/aliases/#{lang_code}")
+        get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/aliases/#{lang_code}")
       end
 
       # Retrieve a Property's aliases.
@@ -29,7 +29,7 @@ module WikidataAdaptor
       #
       # @return [Hash] Property's aliases by language.
       def get_property_aliases(property_id)
-        get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases")
+        get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/aliases")
       end
 
       # Retrieve a Property's aliases in a specific language.
@@ -39,7 +39,7 @@ module WikidataAdaptor
       #
       # @return [Array[String]] Property's aliases in a specific language.
       def get_property_alias(property_id, lang_code)
-        get_json("#{endpoint}/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}")
+        get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}")
       end
     end
   end

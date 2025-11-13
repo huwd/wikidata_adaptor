@@ -6,12 +6,12 @@ module WikidataAdaptor
       # https://doc.wikimedia.org/Wikibase/master/js/rest-api/#/OpenAPI%20document/getOpenApiDoc
       module OpenApiDocument
         ##################################
-        # GET /openapi.json
+        # GET /v1/openapi.json
         ##################################
         def stub_get_openapi_document(response_body = nil)
           stub_rest_api_request(
             :get,
-            "/openapi.json",
+            "/v1/openapi.json",
             response_body: response_body || {
               openapi: "3.0.0",
               info: {
