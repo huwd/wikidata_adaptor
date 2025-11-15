@@ -36,4 +36,38 @@ RSpec.describe WikidataAdaptor::RestApi::Items do
       expect { api_client.get_item(item_id) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#post_item" do
+    it "creates a new item" do
+      stub_post_item(posted_item_payload_fixture)
+      expect(api_client.post_item(posted_item_payload_fixture).parsed_content).to eq(
+        posted_item_response_fixture
+      )
+    end
+
+    it "raises a 400 response status for an invalid request" do
+      stub_post_item_invalid_item
+      expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPBadRequest)
+    end
+
+    it "raises a 403 response status if access is denied" do
+      stub_post_item_access_denied
+      expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPForbidden)
+    end
+
+    it "raises a 422 response status if the edit request violates data policy" do
+      stub_post_item_data_policy_violation
+      expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPUnprocessableEntity)
+    end
+
+    it "raises a 429 response status if the request limit is exceeded" do
+      stub_post_item_request_limit_reached
+      expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPTooManyRequests)
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_post_item_unexpected_error({})
+      expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

@@ -55,6 +55,93 @@ module WikidataAdaptor
             }
           )
         end
+
+        ###############################
+        # POST /v1/entities/items
+        ###############################
+        def stub_post_item(payload, response_body = nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 201,
+            with: { body: payload.to_json },
+            response_body: response_body || posted_item_response_fixture.to_json
+          )
+        end
+
+        def stub_post_item_invalid_item(response_body = nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 400,
+            response_body: response_body || {
+              code: "invalid-item-data",
+              message: "The provided item data is invalid."
+            }
+          )
+        end
+
+        def stub_post_item_access_denied
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 403,
+            response_body: {
+              code: "permission-denied",
+              message: "Access to resource is denied",
+              context: {
+                denial_reason: "{reason_code}",
+                denial_context: "{additional_context}"
+              }
+            }
+          )
+        end
+
+        def stub_post_item_data_policy_violation
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 422,
+            response_body: {
+              code: "data-policy-violation",
+              message: "Edit violates data policy",
+              context: {
+                violation: "{violation_code}",
+                violation_context: {
+                  some: "context"
+                }
+              }
+            }
+          )
+        end
+
+        def stub_post_item_request_limit_reached
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 429,
+            response_body: {
+              code: "request-limit-reached",
+              message: "Exceeded the limit of actions that can be performed in a given span of time",
+              context: {
+                reason: "{reason_code}"
+              }
+            }
+          )
+        end
+
+        def stub_post_item_unexpected_error(payload)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: {
+              code: "unexpected-error",
+              message: "Unexpected Error"
+            }
+          )
+        end
       end
     end
   end

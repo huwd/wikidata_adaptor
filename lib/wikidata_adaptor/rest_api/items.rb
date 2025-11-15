@@ -12,6 +12,15 @@ module WikidataAdaptor
       def get_item(item_id)
         get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}")
       end
+
+      # Create a Wikibase Item
+      #
+      # @param [Hash] payload Item containing a Wikibase Item and edit metadata
+      #
+      # @return [Hash] A single Wikibase Item.
+      def post_item(payload)
+        post_json("#{endpoint}/v1/entities/items", payload)
+      end
     end
   end
 end
