@@ -14,10 +14,10 @@ RSpec.describe WikidataAdaptor::RestApi::Items do
   describe "#get_item" do
     let(:invalid_item_id) { "Bloop" }
 
-    it "gets a wikidata item based on the item's ID" do
+    it "gets a wikidata item with expected keys based on the item's ID" do
       stub_get_item(item_id)
       expect(api_client.get_item(item_id).parsed_content.keys).to eq(
-        %w[id type labels descriptions aliases sitelinks statements]
+        %w[id type labels descriptions aliases statements sitelinks]
       )
     end
 
