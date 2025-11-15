@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require_relative "support/support"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
       module Items
+        include WikidataAdaptor::TestHelpers::RestApi::Support
+
         ###############################
         # GET /v1/entities/items/:item_id
         ###############################
@@ -11,24 +14,9 @@ module WikidataAdaptor
           stub_rest_api_request(
             :get,
             "/v1/entities/items/#{item_id}",
-            response_body: response_body || {
-              id: item_id.to_s,
-              type: "item",
-              labels: { en: "Douglas Adams", fr: "Douglas Adams" },
-              descriptions: {
-                en: "English science fiction writer and humourist",
-                fr: "écrivain de science-fiction et humoriste anglais"
-              },
-              aliases: {
-                en: ["Douglas Noel Adams", "Douglas Noël Adams"],
-                fr: ["Douglas Noel Adams"]
-              },
-              sitelinks: {
-                enwiki: { title: "Douglas Adams", badges: [], url: "https://en.wikipedia.org/wiki/Douglas_Adams" },
-                frwiki: { title: "Douglas Adams", badges: [], url: "https://fr.wikipedia.org/wiki/Douglas_Adams" }
-              },
-              statements: {}
-            }
+            response_body: response_body || load_path_example(
+              "/v1/entities/items/{item_id}", "get"
+            )
           )
         end
 
