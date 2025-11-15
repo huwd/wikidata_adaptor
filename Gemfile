@@ -11,6 +11,6 @@ gem "rspec", "~> 3.0"
 
 gem "rubocop-rake"
 
-gem "dotenv", "2.8.1"
+gem "dotenv", "3.1.8"
 gem "rubocop", "~> 1.21"
 gem "webmock", "~> 3.17"
