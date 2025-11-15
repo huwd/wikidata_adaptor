@@ -24,7 +24,7 @@ module WikidataAdaptor
 
       # Simple Property search by prefix, for labels and aliases
       #
-      # @param [String] qquery The search query prefix, for example "taxo".
+      # @param [String] query The search query prefix, for example "taxon".
       # @param [String] lang The language to search labels in, for example "en".
       # @param [Integer] limit The maximum number of results to return.
       # @param [Integer] offset The number of results to skip (for pagination).
