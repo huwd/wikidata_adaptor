@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+env_file_args=()
+if [[ -f integration/.env ]]; then
+	env_file_args=(--env-file integration/.env)
+fi
+
+docker compose --project-directory integration "${env_file_args[@]}" -f integration/docker-compose.yml down -v

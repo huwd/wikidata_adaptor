@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "net/http"
+require "uri"
+
+url = ARGV[0]
+raise "Usage: wait-for-url <url> [timeout_seconds]" unless url
+
+timeout = Integer(ARGV[1] || "120")
+interval = 2
+
+uri = URI.parse(url)
+
+deadline = Time.now + timeout
+loop do
+  begin
+    res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
+      http.read_timeout = 5
+      http.open_timeout = 5
+      http.get(uri.request_uri)
+    end
+
+    if res.code.to_i >= 200 && res.code.to_i < 500
+      puts "ready: #{url} (#{res.code})"
+      exit 0
+    end
+  rescue StandardError => e
+    # keep waiting
+    e
+  end
+
+  break if Time.now >= deadline
+
+  sleep interval
+end
+
+warn "timeout waiting for #{url}"
+warn last_error.message if defined?(last_error) && last_error
+exit 1

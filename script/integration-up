@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+env_file_args=()
+if [[ -f integration/.env ]]; then
+	env_file_args=(--env-file integration/.env)
+fi
+
+docker compose --project-directory integration "${env_file_args[@]}" -f integration/docker-compose.yml up -d
+
+# Wait for the REST API to come up
+./script/wait-for-url "${WIKIBASE_REST_ENDPOINT:-http://localhost:${WIKIBASE_PORT:-8080}/w/rest.php/wikibase}/v1/openapi.json" 300
