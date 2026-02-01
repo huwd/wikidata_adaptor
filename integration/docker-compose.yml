@@ -1,0 +1,97 @@
+name: wikidata-adaptor-integration
+
+# Core-only Wikibase stack based on:
+# https://github.com/wmde/wikibase-release-pipeline/blob/main/deploy/docker-compose.yml
+#
+# Intentionally omitted for speed:
+# - WDQS / SPARQL (wdqs, wdqs-updater, wdqs-frontend)
+# - traefik
+# - quickstatements
+
+services:
+  mysql:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-my_wiki}
+      MYSQL_USER: ${DB_USER:-wikiuser}
+      MYSQL_PASSWORD: ${DB_PASS:-wikpass}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  elasticsearch:
+    image: wikibase/elasticsearch:1
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: ${ES_JAVA_OPTS:--Xms512m -Xmx512m -Dlog4j2.formatMsgNoLookups=true}
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "--fail", "http://localhost:9200"]
+      start_period: 120s
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  wikibase:
+    image: wikibase/wikibase:5
+    depends_on:
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "${WIKIBASE_PORT:-8080}:80"
+    volumes:
+      # Optional: mount custom config if you need to tweak LocalSettings.
+      - ./config:/config:rw
+      - wikibase-image-data:/var/www/html/images
+    environment:
+      # Required by the wikibase/wikibase image on first boot
+      METADATA_CALLBACK: ${METADATA_CALLBACK:-false}
+
+      MW_WG_SITENAME: ${MW_WG_SITENAME:-Wikibase}
+      MW_ADMIN_NAME: ${MW_ADMIN_NAME:-admin}
+      # MediaWiki enforces password strength requirements on first install.
+      MW_ADMIN_PASS: ${MW_ADMIN_PASS:-integration-admin-12345}
+      MW_ADMIN_EMAIL: ${MW_ADMIN_EMAIL:-admin@example.org}
+      # When running locally without a reverse proxy, keep this http.
+      MW_WG_SERVER: ${MW_WG_SERVER:-http://localhost:${WIKIBASE_PORT:-8080}}
+
+      DB_SERVER: mysql:3306
+      DB_USER: ${DB_USER:-wikiuser}
+      DB_PASS: ${DB_PASS:-wikpass}
+      DB_NAME: ${DB_NAME:-my_wiki}
+
+      ELASTICSEARCH_HOST: elasticsearch
+    healthcheck:
+      test:
+        ["CMD", "curl", "--silent", "--fail", "http://localhost/wiki/Main_Page"]
+      interval: 10s
+      start_period: 300s
+      timeout: 5s
+      retries: 30
+
+  wikibase-jobrunner:
+    image: wikibase/wikibase:5
+    command: /jobrunner-entrypoint.sh
+    depends_on:
+      wikibase:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes_from:
+      - wikibase
+
+volumes:
+  mysql-data:
+  elasticsearch-data:
+  wikibase-image-data:
