@@ -2,18 +2,22 @@ PATH
   remote: .
   specs:
     wikidata_adaptor (0.0.0)
-      api_adaptor (~> 0.0.1)
+      api_adaptor (>= 0.1.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
-    api_adaptor (0.0.2)
+    addressable (2.8.8)
+      public_suffix (>= 2.0.2, < 8.0)
+    api_adaptor (0.1.0)
       addressable (~> 2.8)
+      base64 (~> 0.3)
+      bigdecimal (>= 3.3, < 5.0)
       link_header (~> 0.0.8)
+      logger (>= 1.6, < 2.0)
       rest-client (~> 2.1)
     ast (2.4.3)
+    base64 (0.3.0)
     bigdecimal (3.3.1)
     crack (1.0.1)
       bigdecimal
@@ -33,7 +37,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0924)
+    mime-types-data (3.2026.0127)
     netrc (0.11.0)
     parallel (1.27.0)
     parser (3.3.10.1)
