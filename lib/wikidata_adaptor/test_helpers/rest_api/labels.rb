@@ -29,6 +29,41 @@ module WikidataAdaptor
           )
         end
 
+        #########################################################################
+        # GET /v1/entities/items/:item_id/labels_with_language_fallback/:language_code
+        #########################################################################
+        def stub_get_item_label_with_language_fallback(item_id, language_code)
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/items/#{item_id}/labels_with_language_fallback/#{language_code}",
+            response_body: "Douglas Adams"
+          )
+        end
+
+        #########################################################################
+        # GET /v1/entities/items/:item_id/labels_with_language_fallback/:language_code
+        # -> 307 Location: /v1/entities/items/:item_id/labels/:redirect_language_code
+        #########################################################################
+        def stub_get_item_label_with_language_fallback_redirect(item_id, language_code,
+                                                                redirect_language_code: language_code,
+                                                                response_body: "Douglas Adams")
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/items/#{item_id}/labels_with_language_fallback/#{language_code}",
+            response_status: 307,
+            response_headers: {
+              "Location" => "#{WIKIBASE_REST_ENDPOINT}/v1/entities/items/#{item_id}/labels/#{redirect_language_code}"
+            },
+            response_body: ""
+          )
+
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/items/#{item_id}/labels/#{redirect_language_code}",
+            response_body: response_body
+          )
+        end
+
         ###########################################
         # GET /v1/entities/properties/:property_id/labels
         ###########################################
@@ -51,6 +86,41 @@ module WikidataAdaptor
             :get,
             "/v1/entities/properties/#{property_id}/labels/#{language_code}",
             response_body: "instance of"
+          )
+        end
+
+        #################################################################################
+        # GET /v1/entities/properties/:property_id/labels_with_language_fallback/:language_code
+        #################################################################################
+        def stub_get_property_label_with_language_fallback(property_id, language_code)
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/properties/#{property_id}/labels_with_language_fallback/#{language_code}",
+            response_body: "instance of"
+          )
+        end
+
+        #################################################################################
+        # GET /v1/entities/properties/:property_id/labels_with_language_fallback/:language_code
+        # -> 307 Location: /v1/entities/properties/:property_id/labels/:redirect_language_code
+        #################################################################################
+        def stub_get_property_label_with_language_fallback_redirect(property_id, language_code,
+                                                                    redirect_language_code: language_code,
+                                                                    response_body: "instance of")
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/properties/#{property_id}/labels_with_language_fallback/#{language_code}",
+            response_status: 307,
+            response_headers: {
+              "Location" => "#{WIKIBASE_REST_ENDPOINT}/v1/entities/properties/#{property_id}/labels/#{redirect_language_code}"
+            },
+            response_body: ""
+          )
+
+          stub_rest_api_request(
+            :get,
+            "/v1/entities/properties/#{property_id}/labels/#{redirect_language_code}",
+            response_body: response_body
           )
         end
       end
