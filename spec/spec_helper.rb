@@ -4,7 +4,13 @@ require "wikidata_adaptor"
 require "webmock/rspec"
 
 if ENV["INTEGRATION"] == "1"
-  WebMock.disable_net_connect!(allow_localhost: true)
+  # Allow connections to localhost and the configured Wikibase endpoint
+  allowed_hosts = ["localhost"]
+  if ENV["WIKIBASE_REST_ENDPOINT"]
+    endpoint_uri = URI.parse(ENV["WIKIBASE_REST_ENDPOINT"])
+    allowed_hosts << endpoint_uri.host if endpoint_uri.host
+  end
+  WebMock.disable_net_connect!(allow: allowed_hosts)
 else
   WebMock.disable_net_connect!
 end
@@ -19,4 +25,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # Exclude integration specs by default unless INTEGRATION=1
+  config.filter_run_excluding integration: true unless ENV["INTEGRATION"] == "1"
 end

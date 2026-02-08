@@ -68,24 +68,39 @@ module WikidataAdaptor
         uri = URI.parse("#{wikibase_endpoint}/v1/entities/properties")
 
         retries = 0
-        loop do
+        begin
+          http = Net::HTTP.new(uri.host, uri.port)
+          http.use_ssl = uri.scheme == "https"
+
           req = Net::HTTP::Post.new(uri)
           req["Content-Type"] = "application/json"
+          token = wikibase_bearer_token
+          req["Authorization"] = "Bearer #{token}" if token && !token.empty?
           req.body = payload.to_json
 
-          res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+          res = http.request(req)
 
           if res.code == "429"
             retries += 1
             raise "Property creation rate limited after #{retries} retries" if retries > 5
 
             sleep(retries * 5)
-            next
+            retry
+          end
+
+          if res.code == "401" || res.code == "403"
+            skip "Wikibase refused writes (#{res.code}). Set WIKIBASE_BEARER_TOKEN or configure the local instance to allow writes."
           end
 
           raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
 
-          return JSON.parse(res.body)
+          JSON.parse(res.body)
+        rescue ApiAdaptor::HTTPTooManyRequests
+          retries += 1
+          raise if retries > 5
+
+          sleep(retries * 5)
+          retry
         end
       end
     end
