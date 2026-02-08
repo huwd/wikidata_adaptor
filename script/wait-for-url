@@ -13,6 +13,7 @@ interval = 2
 uri = URI.parse(url)
 
 deadline = Time.now + timeout
+last_error = nil
 loop do
   begin
     res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
@@ -27,7 +28,7 @@ loop do
     end
   rescue StandardError => e
     # keep waiting
-    e
+    last_error = e
   end
 
   break if Time.now >= deadline
