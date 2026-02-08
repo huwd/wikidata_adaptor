@@ -8,8 +8,13 @@ if ENV["INTEGRATION"] == "1"
   # Allow connections to localhost and the host specified in WIKIBASE_REST_ENDPOINT
   allowed_hosts = ["localhost", "127.0.0.1"]
   if ENV["WIKIBASE_REST_ENDPOINT"]
-    uri = URI.parse(ENV["WIKIBASE_REST_ENDPOINT"])
-    allowed_hosts << uri.host if uri.host
+    begin
+      uri = URI.parse(ENV["WIKIBASE_REST_ENDPOINT"])
+      allowed_hosts << uri.host if uri.host
+    rescue URI::InvalidURIError
+      # If the URL is invalid, just allow localhost
+      warn "Warning: WIKIBASE_REST_ENDPOINT is not a valid URI: #{ENV['WIKIBASE_REST_ENDPOINT']}"
+    end
   end
   WebMock.disable_net_connect!(allow: allowed_hosts.uniq)
 else
