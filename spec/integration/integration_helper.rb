@@ -67,11 +67,11 @@ module WikidataAdaptor
 
         uri = URI.parse("#{wikibase_endpoint}/v1/entities/properties")
 
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme == "https"
+
         retries = 0
         begin
-          http = Net::HTTP.new(uri.host, uri.port)
-          http.use_ssl = uri.scheme == "https"
-
           req = Net::HTTP::Post.new(uri)
           req["Content-Type"] = "application/json"
           token = wikibase_bearer_token
@@ -95,12 +95,6 @@ module WikidataAdaptor
           raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
 
           JSON.parse(res.body)
-        rescue ApiAdaptor::HTTPTooManyRequests
-          retries += 1
-          raise if retries > 5
-
-          sleep(retries * 5)
-          retry
         end
       end
     end
