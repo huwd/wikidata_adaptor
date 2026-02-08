@@ -53,6 +53,7 @@ RSpec.describe WikidataAdaptor::RestApi::SearchProperty do
           }
         )
     end
+
     describe "test stub" do
       it "can return a custom response" do
         custom_response = {
@@ -109,6 +110,7 @@ RSpec.describe WikidataAdaptor::RestApi::SearchProperty do
           }
         )
     end
+
     describe "test stub" do
       it "can return a custom response" do
         custom_response = {
