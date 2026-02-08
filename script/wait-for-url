@@ -21,7 +21,7 @@ loop do
       http.get(uri.request_uri)
     end
 
-    if res.code.to_i >= 200 && res.code.to_i < 500
+    if res.code.to_i >= 200 && res.code.to_i < 300
       puts "ready: #{url} (#{res.code})"
       exit 0
     end
