@@ -19,10 +19,10 @@ loop do
     http.use_ssl = uri.scheme == "https"
     http.open_timeout = 5
     http.read_timeout = 5
-    
+
     http.start do
       res = http.get(uri.request_uri)
-      
+
       if res.code.to_i >= 200 && res.code.to_i < 300
         puts "ready: #{url} (#{res.code})"
         exit 0
