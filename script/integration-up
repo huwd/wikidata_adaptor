@@ -10,5 +10,12 @@ fi
 
 docker compose --project-directory integration "${env_file_args[@]}" -f integration/docker-compose.yml up -d
 
+# Load integration/.env into this shell so URL/port match docker-compose configuration
+if [[ -f integration/.env ]]; then
+	# Export variables defined in integration/.env
+	set -a
+	. integration/.env
+	set +a
+fi
 # Wait for the REST API to come up
 ./script/wait-for-url "${WIKIBASE_REST_ENDPOINT:-http://localhost:${WIKIBASE_PORT:-8080}/w/rest.php/wikibase}/v1/openapi.json" 300

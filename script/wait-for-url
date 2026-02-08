@@ -23,7 +23,7 @@ loop do
     http.start do
       res = http.get(uri.request_uri)
 
-      if res.code.to_i >= 200 && res.code.to_i < 500
+      if res.code.to_i >= 200 && res.code.to_i < 300
         puts "ready: #{url} (#{res.code})"
         exit 0
       end
@@ -39,5 +39,5 @@ loop do
 end
 
 warn "timeout waiting for #{url}"
-warn last_error.message if last_error
+warn last_error.message if defined?(last_error) && last_error
 exit 1
