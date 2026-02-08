@@ -54,6 +54,7 @@ services:
     volumes:
       # Optional: mount custom config if you need to tweak LocalSettings.
       - ./config:/config:rw
+      - ./config/99_IntegrationTesting.php:/var/www/html/LocalSettings.d/99_IntegrationTesting.php:ro
       - wikibase-image-data:/var/www/html/images
     environment:
       # Required by the wikibase/wikibase image on first boot
