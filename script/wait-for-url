@@ -15,15 +15,18 @@ uri = URI.parse(url)
 deadline = Time.now + timeout
 loop do
   begin
-    res = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
-      http.read_timeout = 5
-      http.open_timeout = 5
-      http.get(uri.request_uri)
-    end
-
-    if res.code.to_i >= 200 && res.code.to_i < 300
-      puts "ready: #{url} (#{res.code})"
-      exit 0
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == "https"
+    http.open_timeout = 5
+    http.read_timeout = 5
+    
+    http.start do
+      res = http.get(uri.request_uri)
+      
+      if res.code.to_i >= 200 && res.code.to_i < 300
+        puts "ready: #{url} (#{res.code})"
+        exit 0
+      end
     end
   rescue StandardError => e
     # keep waiting
