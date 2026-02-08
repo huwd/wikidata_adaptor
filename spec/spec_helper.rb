@@ -31,4 +31,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # Exclude integration tests by default unless INTEGRATION=1 is set
+  config.filter_run_excluding integration: true unless ENV["INTEGRATION"] == "1"
 end
