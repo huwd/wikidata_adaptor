@@ -68,24 +68,35 @@ module WikidataAdaptor
         uri = URI.parse("#{wikibase_endpoint}/v1/entities/properties")
 
         retries = 0
-        loop do
-          req = Net::HTTP::Post.new(uri)
-          req["Content-Type"] = "application/json"
-          req.body = payload.to_json
+        begin
+          loop do
+            req = Net::HTTP::Post.new(uri)
+            req["Content-Type"] = "application/json"
+            token = wikibase_bearer_token
+            req["Authorization"] = "Bearer #{token}" if token && !token.empty?
+            req.body = payload.to_json
 
-          res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+            res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
 
-          if res.code == "429"
-            retries += 1
-            raise "Property creation rate limited after #{retries} retries" if retries > 5
+            if res.code == "429"
+              retries += 1
+              raise "Property creation rate limited after #{retries} retries" if retries > 5
 
-            sleep(retries * 5)
-            next
+              sleep(retries * 5)
+              next
+            end
+
+            if %w[401 403].include?(res.code)
+              raise ApiAdaptor::HTTPUnauthorized if res.code == "401"
+              raise ApiAdaptor::HTTPForbidden if res.code == "403"
+            end
+
+            raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
+
+            return JSON.parse(res.body)
           end
-
-          raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
-
-          return JSON.parse(res.body)
+        rescue ApiAdaptor::HTTPUnauthorized, ApiAdaptor::HTTPForbidden => e
+          skip "Wikibase refused writes (#{e.class}). Set WIKIBASE_BEARER_TOKEN or configure the local instance to allow writes."
         end
       end
     end
