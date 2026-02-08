@@ -2,9 +2,16 @@
 
 require "wikidata_adaptor"
 require "webmock/rspec"
+require "uri"
 
 if ENV["INTEGRATION"] == "1"
-  WebMock.disable_net_connect!(allow_localhost: true)
+  # Allow connections to localhost and the host specified in WIKIBASE_REST_ENDPOINT
+  allowed_hosts = ["localhost", "127.0.0.1"]
+  if ENV["WIKIBASE_REST_ENDPOINT"]
+    uri = URI.parse(ENV["WIKIBASE_REST_ENDPOINT"])
+    allowed_hosts << uri.host if uri.host
+  end
+  WebMock.disable_net_connect!(allow: allowed_hosts.uniq)
 else
   WebMock.disable_net_connect!
 end
