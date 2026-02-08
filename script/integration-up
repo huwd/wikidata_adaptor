@@ -8,7 +8,29 @@ if [[ -f integration/.env ]]; then
 	env_file_args=(--env-file integration/.env)
 fi
 
-docker compose --project-directory integration "${env_file_args[@]}" -f integration/docker-compose.yml up -d
+# Load required variables from integration/.env into this shell so URL/port match docker-compose configuration
+if [[ -f integration/.env ]]; then
+	# Safely extract only the variables needed by this script from integration/.env
+	while IFS='=' read -r key value; do
+		# Trim leading/trailing whitespace from the key
+		key="${key#"${key%%[![:space:]]*}"}"
+		key="${key%"${key##*[![:space:]]}"}"
+		# Skip empty lines, comments, or lines without a value
+		[[ -z "$key" || "$key" == \#* || -z "${value+x}" ]] && continue
+		case "$key" in
+			WIKIBASE_PORT|WIKIBASE_REST_ENDPOINT)
+				# Trim leading/trailing whitespace from the value
+				value="${value#"${value%%[![:space:]]*}"}"
+				value="${value%"${value##*[![:space:]]}"}"
+				# Strip surrounding single or double quotes, if present
+				if [[ ( "$value" == \"*\" && "$value" == *\" ) || ( "$value" == \'*\' && "$value" == *\' ) ]]; then
+					value="${value:1:${#value}-2}"
+				fi
+				export "$key=$value"
+				;;
+		esac
+	done < integration/.env
+fi
 
 # Wait for the REST API to come up
 ./script/wait-for-url "${WIKIBASE_REST_ENDPOINT:-http://localhost:${WIKIBASE_PORT:-8080}/w/rest.php/wikibase}/v1/openapi.json" 300
