@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "wikidata_adaptor/rest_api"
+require "net/http"
+require "json"
+require "securerandom"
 require "spec_helper"
 
 module WikidataAdaptor
@@ -23,18 +26,67 @@ module WikidataAdaptor
         WikidataAdaptor::RestApi.new(wikibase_endpoint, opts)
       end
 
-      def create_item!(labels: { "en" => "Integration test label" }, descriptions: nil)
+      def unique_label(prefix)
+        "#{prefix} #{SecureRandom.hex(4)}"
+      end
+
+      def create_item!(labels: { "en" => unique_label("item") }, descriptions: nil, aliases: nil)
+        retries = 0
+        begin
+          payload = {
+            "item" => {
+              "labels" => labels
+            },
+            "comment" => "wikidata_adaptor integration seed"
+          }
+          payload["item"]["descriptions"] = descriptions if descriptions
+          payload["item"]["aliases"] = aliases if aliases
+
+          api_client.post_item(payload).parsed_content
+        rescue ApiAdaptor::HTTPTooManyRequests
+          retries += 1
+          raise if retries > 5
+
+          sleep(retries * 5)
+          retry
+        rescue ApiAdaptor::HTTPUnauthorized, ApiAdaptor::HTTPForbidden => e
+          skip "Wikibase refused writes (#{e.class}). Set WIKIBASE_BEARER_TOKEN or configure the local instance to allow writes."
+        end
+      end
+
+      def create_property!(data_type: "string", labels: { "en" => unique_label("property") }, descriptions: nil, aliases: nil)
         payload = {
-          "item" => {
+          "property" => {
+            "data_type" => data_type,
             "labels" => labels
           },
           "comment" => "wikidata_adaptor integration seed"
         }
-        payload["item"]["descriptions"] = descriptions if descriptions
+        payload["property"]["descriptions"] = descriptions if descriptions
+        payload["property"]["aliases"] = aliases if aliases
 
-        api_client.post_item(payload).parsed_content
-      rescue ApiAdaptor::HTTPUnauthorized, ApiAdaptor::HTTPForbidden => e
-        skip "Wikibase refused writes (#{e.class}). Set WIKIBASE_BEARER_TOKEN or configure the local instance to allow writes."
+        uri = URI.parse("#{wikibase_endpoint}/v1/entities/properties")
+
+        retries = 0
+        loop do
+          req = Net::HTTP::Post.new(uri)
+          req["Content-Type"] = "application/json"
+          req.body = payload.to_json
+
+          res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+
+          if res.code == "429"
+            retries += 1
+            raise "Property creation rate limited after #{retries} retries" if retries > 5
+
+            sleep(retries * 5)
+            next
+          end
+
+          raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
+
+          return JSON.parse(res.body)
+        end
       end
     end
   end
