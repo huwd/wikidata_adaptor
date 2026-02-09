@@ -86,9 +86,10 @@ module WikidataAdaptor
               next
             end
 
-            if %w[401 403].include?(res.code)
-              raise ApiAdaptor::HTTPUnauthorized if res.code == "401"
-              raise ApiAdaptor::HTTPForbidden if res.code == "403"
+            if res.code == "401"
+              raise ApiAdaptor::HTTPUnauthorized
+            elsif res.code == "403"
+              raise ApiAdaptor::HTTPForbidden
             end
 
             raise "Property creation failed (#{res.code}): #{res.body}" unless res.code.start_with?("2")
