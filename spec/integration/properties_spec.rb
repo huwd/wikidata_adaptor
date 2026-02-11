@@ -33,4 +33,26 @@ RSpec.describe "Properties", :integration do
       expect { api_client.get_property("P99999999") }.to raise_error(ApiAdaptor::HTTPNotFound)
     end
   end
+
+  describe "#post_property" do
+    it "creates a new property and returns it" do
+      label = "Post prop #{SecureRandom.hex(4)}"
+      desc = "Created by integration #{SecureRandom.hex(4)}"
+      payload = {
+        "property" => {
+          "data_type" => "string",
+          "labels" => { "en" => label },
+          "descriptions" => { "en" => desc }
+        },
+        "comment" => "integration test"
+      }
+      result = api_client.post_property(payload).parsed_content
+
+      expect(result["id"]).to match(/\AP\d+\z/)
+      expect(result["type"]).to eq("property")
+      expect(result["data_type"]).to eq("string")
+      expect(result["labels"]).to include("en" => label)
+      expect(result["descriptions"]).to include("en" => desc)
+    end
+  end
 end

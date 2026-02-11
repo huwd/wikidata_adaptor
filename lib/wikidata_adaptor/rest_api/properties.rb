@@ -12,6 +12,15 @@ module WikidataAdaptor
       def get_property(property_id)
         get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}")
       end
+
+      # Create a Wikibase Property.
+      #
+      # @param [Hash] payload Property containing a Wikibase Property and edit metadata.
+      #
+      # @return [Hash] A single Wikibase Property.
+      def post_property(payload)
+        post_json("#{endpoint}/v1/entities/properties", payload)
+      end
     end
   end
 end
