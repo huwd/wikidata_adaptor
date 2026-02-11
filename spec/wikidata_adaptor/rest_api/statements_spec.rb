@@ -52,6 +52,32 @@ RSpec.describe WikidataAdaptor::RestApi::Statements do
     end
   end
 
+  describe "#post_item_statement" do
+    let(:payload) do
+      {
+        "statement" => {
+          "property" => { "id" => "P92" },
+          "value" => { "type" => "value", "content" => "I am a goat" }
+        },
+        "comment" => "Add statement"
+      }
+    end
+
+    it "creates a new statement on an item" do
+      stub_post_item_statement(item_id, payload)
+      response = api_client.post_item_statement(item_id, payload).parsed_content
+      expect(response).to include(
+        "id" => "Q42$6403c562-401a-2b26-85cc-8327801145e1",
+        "rank" => "normal"
+      )
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_post_item_statement_unexpected_error(item_id, payload)
+      expect { api_client.post_item_statement(item_id, payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
   describe "#get_statement" do
     it "returns a specific statement by statement_id" do
       stub_get_statement(statement_id)
@@ -101,6 +127,32 @@ RSpec.describe WikidataAdaptor::RestApi::Statements do
                  "qualifiers" => [],
                  "references" => []
                })
+    end
+  end
+
+  describe "#post_property_statement" do
+    let(:payload) do
+      {
+        "statement" => {
+          "property" => { "id" => property_id },
+          "value" => { "type" => "value", "content" => "Q5" }
+        },
+        "comment" => "Add statement"
+      }
+    end
+
+    it "creates a new statement on a property" do
+      stub_post_property_statement(property_id, payload)
+      response = api_client.post_property_statement(property_id, payload).parsed_content
+      expect(response).to include(
+        "id" => "P31$11111111-2222-3333-4444-555555555555",
+        "rank" => "normal"
+      )
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_post_property_statement_unexpected_error(property_id, payload)
+      expect { api_client.post_property_statement(property_id, payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
 end
