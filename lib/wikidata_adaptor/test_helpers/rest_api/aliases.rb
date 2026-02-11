@@ -37,6 +37,42 @@ module WikidataAdaptor
           )
         end
 
+        ############################################################
+        # POST /v1/entities/items/:item_id/aliases/:language_code
+        ############################################################
+        def stub_post_item_aliases(item_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items/#{item_id}/aliases/#{language_code}",
+            response_status: 200,
+            with: { body: payload.to_json },
+            response_body: response_body || ["Douglas Noel Adams", "Douglas Noël Adams"]
+          )
+        end
+
+        def stub_post_item_aliases_created(item_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items/#{item_id}/aliases/#{language_code}",
+            response_status: 201,
+            with: { body: payload.to_json },
+            response_body: response_body || ["Douglas Noel Adams", "Douglas Noël Adams"]
+          )
+        end
+
+        def stub_post_item_aliases_unexpected_error(item_id, language_code, payload)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/items/#{item_id}/aliases/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: {
+              code: "unexpected-error",
+              message: "Unexpected Error"
+            }
+          )
+        end
+
         ########################################
         # GET /v1/entities/properties/:property_id/aliases
         ########################################
@@ -59,6 +95,42 @@ module WikidataAdaptor
             :get,
             "/v1/entities/properties/#{property_id}/aliases/#{language_code}",
             response_body: ["is a"]
+          )
+        end
+
+        ################################################################
+        # POST /v1/entities/properties/:property_id/aliases/:language_code
+        ################################################################
+        def stub_post_property_aliases(property_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/properties/#{property_id}/aliases/#{language_code}",
+            response_status: 200,
+            with: { body: payload.to_json },
+            response_body: response_body || ["is a", "is an"]
+          )
+        end
+
+        def stub_post_property_aliases_created(property_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/properties/#{property_id}/aliases/#{language_code}",
+            response_status: 201,
+            with: { body: payload.to_json },
+            response_body: response_body || ["is a", "is an"]
+          )
+        end
+
+        def stub_post_property_aliases_unexpected_error(property_id, language_code, payload)
+          stub_rest_api_request(
+            :post,
+            "/v1/entities/properties/#{property_id}/aliases/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: {
+              code: "unexpected-error",
+              message: "Unexpected Error"
+            }
           )
         end
       end

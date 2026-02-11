@@ -39,6 +39,21 @@ RSpec.describe WikidataAdaptor::RestApi::Aliases do
     end
   end
 
+  describe "#post_item_aliases" do
+    let(:payload) { { "aliases" => ["Douglas Noel Adams"], "comment" => "Add alias" } }
+
+    it "adds aliases to an item and returns the updated list" do
+      stub_post_item_aliases(item_id, "en", payload)
+      expect(api_client.post_item_aliases(item_id, "en", payload).parsed_content)
+        .to eq(["Douglas Noel Adams", "Douglas Noël Adams"])
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_post_item_aliases_unexpected_error(item_id, "en", payload)
+      expect { api_client.post_item_aliases(item_id, "en", payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
   describe "#get_property_aliases" do
     it "gets property aliases in all locales by property_id" do
       stub_get_property_aliases(property_id)
@@ -55,6 +70,21 @@ RSpec.describe WikidataAdaptor::RestApi::Aliases do
       stub_get_property_alias(property_id, "en")
       expect(api_client.get_property_alias(property_id, "en").parsed_content)
         .to eq(["is a"])
+    end
+  end
+
+  describe "#post_property_aliases" do
+    let(:payload) { { "aliases" => ["is an"], "comment" => "Add alias" } }
+
+    it "adds aliases to a property and returns the updated list" do
+      stub_post_property_aliases(property_id, "en", payload)
+      expect(api_client.post_property_aliases(property_id, "en", payload).parsed_content)
+        .to eq(["is a", "is an"])
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_post_property_aliases_unexpected_error(property_id, "en", payload)
+      expect { api_client.post_property_aliases(property_id, "en", payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
 end
