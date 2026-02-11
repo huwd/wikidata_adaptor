@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "wikidata_adaptor/rest_api"
+require "uri"
 require "net/http"
 require "json"
 require "securerandom"
