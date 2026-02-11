@@ -144,6 +144,42 @@ module WikidataAdaptor
           }
         end
 
+        def posted_property_response_fixture
+          {
+            "id" => "P1",
+            "type" => "property",
+            "data_type" => "string",
+            "labels" => {
+              "en" => "instance of"
+            },
+            "descriptions" => {
+              "en" => "that class of which this subject is a particular example and member"
+            },
+            "aliases" => {
+              "en" => ["is a"]
+            },
+            "statements" => {}
+          }
+        end
+
+        def posted_property_payload_fixture
+          {
+            "property" => {
+              "data_type" => "string",
+              "labels" => {
+                "en" => "instance of"
+              },
+              "descriptions" => {
+                "en" => "that class of which this subject is a particular example and member"
+              },
+              "aliases" => {
+                "en" => ["is a"]
+              }
+            },
+            "comment" => "Create a Property"
+          }
+        end
+
         def posted_item_payload_fixture
           {
             "item" => {
