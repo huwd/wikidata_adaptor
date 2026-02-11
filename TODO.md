@@ -158,7 +158,7 @@ splitting into sub-PRs per module.
 
 ### Phase 5 — DELETE: remove resources (8 endpoints)
 
-Requires auth. Returns 200 with `"Deleted"` response.
+Requires auth. Returns 200 with a short confirmation string (e.g., "Sitelink deleted").
 
 - Labels: `delete_item_label`, `delete_property_label`
 - Descriptions: `delete_item_description`, `delete_property_description`
