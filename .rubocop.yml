@@ -29,3 +29,7 @@ Naming/AccessorMethodName:
 RSpec/BeforeAfterAll:
   Exclude:
     - "spec/integration/**/*"
+
+RSpec/InstanceVariable:
+  Exclude:
+    - "spec/integration/**/*"
