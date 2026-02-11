@@ -33,3 +33,12 @@ RSpec/BeforeAfterAll:
 RSpec/InstanceVariable:
   Exclude:
     - "spec/integration/**/*"
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
