@@ -33,6 +33,24 @@ RSpec.describe WikidataAdaptor::RestApi::Descriptions do
     end
   end
 
+  describe "#get_item_description_with_language_fallback" do
+    context "when the description is defined in the requested language" do
+      it "returns 200 with the description" do
+        stub_get_item_description_with_language_fallback(item_id, "en")
+        expect(api_client.get_item_description_with_language_fallback(item_id, "en").raw_response_body)
+          .to eq("English science fiction writer and humourist")
+      end
+    end
+
+    context "when the description exists only in a fallback language" do
+      it "follows the 307 Location redirect" do
+        stub_get_item_description_with_language_fallback_redirect(item_id, "en")
+        expect(api_client.get_item_description_with_language_fallback(item_id, "en").raw_response_body)
+          .to eq("English science fiction writer and humourist")
+      end
+    end
+  end
+
   describe "#get_property_descriptions" do
     it "gets property descriptions in all locales by property_id" do
       stub_get_property_descriptions(property_id)
@@ -51,6 +69,24 @@ RSpec.describe WikidataAdaptor::RestApi::Descriptions do
         .to eq(
           "that class of which this subject is a particular example and member"
         )
+    end
+  end
+
+  describe "#get_property_description_with_language_fallback" do
+    context "when the description is defined in the requested language" do
+      it "returns 200 with the description" do
+        stub_get_property_description_with_language_fallback(property_id, "en")
+        expect(api_client.get_property_description_with_language_fallback(property_id, "en").raw_response_body)
+          .to eq("that class of which this subject is a particular example and member")
+      end
+    end
+
+    context "when the description exists only in a fallback language" do
+      it "follows the 307 Location redirect" do
+        stub_get_property_description_with_language_fallback_redirect(property_id, "en")
+        expect(api_client.get_property_description_with_language_fallback(property_id, "en").raw_response_body)
+          .to eq("that class of which this subject is a particular example and member")
+      end
     end
   end
 end
