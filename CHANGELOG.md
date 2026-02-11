@@ -4,6 +4,11 @@
 
 - POST item endpoint (`post_item`) with test helpers for error scenarios
   (invalid item, access denied, data policy violation, request limit)
+- POST property endpoint (`post_property`) with matching error stubs
+- POST aliases endpoints (`post_item_aliases`, `post_property_aliases`)
+  to append aliases in a given language
+- POST statement endpoints (`post_item_statement`,
+  `post_property_statement`) to create statements on entities
 - Search items (`search_items`, `suggest_items`) and search properties
   (`search_properties`) endpoints
 - Language fallback handling for labels via 307 redirect following
