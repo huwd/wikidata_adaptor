@@ -69,6 +69,28 @@ module WikidataAdaptor
       def get_property_description_with_language_fallback(property_id, lang_code)
         get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions_with_language_fallback/#{lang_code}")
       end
+
+      # Replace an Item's description in a specific language.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Description value and edit metadata.
+      #
+      # @return [String] The new description value.
+      def put_item_description(item_id, lang_code, payload)
+        put_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/descriptions/#{lang_code}", payload)
+      end
+
+      # Replace a Property's description in a specific language.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Description value and edit metadata.
+      #
+      # @return [String] The new description value.
+      def put_property_description(property_id, lang_code, payload)
+        put_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}", payload)
+      end
     end
   end
 end
