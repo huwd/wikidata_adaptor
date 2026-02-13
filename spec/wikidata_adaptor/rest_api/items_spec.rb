@@ -70,4 +70,25 @@ RSpec.describe WikidataAdaptor::RestApi::Items do
       expect { api_client.post_item({}) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/labels/en", "value" => "Douglas Noel Adams" }],
+        "comment" => "Patch item"
+      }
+    end
+
+    it "patches an item and returns the updated item" do
+      stub_patch_item(item_id, payload)
+      response = api_client.patch_item(item_id, payload).parsed_content
+      expect(response.keys).to include("id", "type", "labels", "descriptions", "aliases", "statements", "sitelinks")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_unexpected_error(item_id, payload)
+      expect { api_client.patch_item(item_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
