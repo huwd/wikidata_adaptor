@@ -17,6 +17,19 @@
   by site ID
 - PUT statement endpoints (`put_item_statement`,
   `put_property_statement`, `put_statement`) to replace statements
+- PATCH item and property endpoints (`patch_item`, `patch_property`)
+  for JSON Patch updates to entire entities
+- PATCH label endpoints (`patch_item_labels`, `patch_property_labels`)
+  for JSON Patch updates to labels
+- PATCH description endpoints (`patch_item_descriptions`,
+  `patch_property_descriptions`) for JSON Patch updates to descriptions
+- PATCH alias endpoints (`patch_item_aliases`, `patch_property_aliases`)
+  for JSON Patch updates to aliases
+- PATCH sitelinks endpoint (`patch_item_sitelinks`) for JSON Patch
+  updates to sitelinks
+- PATCH statement endpoints (`patch_item_statement`,
+  `patch_property_statement`, `patch_statement`) for JSON Patch updates
+  to statements
 - Search items (`search_items`, `suggest_items`) and search properties
   (`search_properties`) endpoints
 - Language fallback handling for labels via 307 redirect following
