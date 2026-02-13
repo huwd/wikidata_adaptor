@@ -92,6 +92,7 @@ RSpec.describe "Labels", :integration do
 
         expect(result).to eq(new_label)
 
+        sleep(1)
         fetched = api_client.get_property_label(@property["id"], "en").parsed_content
         expect(fetched).to eq(new_label)
       end
@@ -113,6 +114,7 @@ RSpec.describe "Labels", :integration do
 
         expect(result).to eq(new_label)
 
+        sleep(1)
         fetched = api_client.get_item_label(@item["id"], "en").parsed_content
         expect(fetched).to eq(new_label)
       end

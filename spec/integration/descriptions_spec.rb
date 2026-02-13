@@ -70,6 +70,7 @@ RSpec.describe "Descriptions", :integration do
 
         expect(result).to eq(new_desc)
 
+        sleep(1)
         fetched = api_client.get_property_description(@property["id"], "en").parsed_content
         expect(fetched).to eq(new_desc)
       end
@@ -95,6 +96,7 @@ RSpec.describe "Descriptions", :integration do
 
         expect(result).to eq(new_desc)
 
+        sleep(1)
         fetched = api_client.get_item_description(@item["id"], "en").parsed_content
         expect(fetched).to eq(new_desc)
       end
