@@ -2,11 +2,11 @@
 
 Tracking coverage of Wikibase REST API v1.4 (OpenAPI spec).
 
-**Covered: 45 / 65 endpoints (69%)**
+**Covered: 57 / 65 endpoints (88%)**
 
 ## Covered endpoints
 
-All GET, POST, and PUT endpoints are implemented.
+All GET, POST, PUT, and PATCH endpoints are implemented.
 
 | #   | Method | Path                                                                                        | Ruby method                                       | Module            |
 | --- | ------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------- |
@@ -55,25 +55,20 @@ All GET, POST, and PUT endpoints are implemented.
 | 43  | PUT    | `/v1/entities/items/{item_id}/statements/{statement_id}`                                    | `put_item_statement`                              | Statements        |
 | 44  | PUT    | `/v1/entities/properties/{property_id}/statements/{statement_id}`                           | `put_property_statement`                          | Statements        |
 | 45  | PUT    | `/v1/statements/{statement_id}`                                                             | `put_statement`                                   | Statements        |
+| 46  | PATCH  | `/v1/entities/items/{item_id}`                                                              | `patch_item`                                      | Items             |
+| 47  | PATCH  | `/v1/entities/items/{item_id}/aliases`                                                      | `patch_item_aliases`                              | Aliases           |
+| 48  | PATCH  | `/v1/entities/items/{item_id}/descriptions`                                                 | `patch_item_descriptions`                         | Descriptions      |
+| 49  | PATCH  | `/v1/entities/items/{item_id}/labels`                                                       | `patch_item_labels`                               | Labels            |
+| 50  | PATCH  | `/v1/entities/items/{item_id}/sitelinks`                                                    | `patch_item_sitelinks`                            | Sitelinks         |
+| 51  | PATCH  | `/v1/entities/items/{item_id}/statements/{statement_id}`                                    | `patch_item_statement`                            | Statements        |
+| 52  | PATCH  | `/v1/entities/properties/{property_id}`                                                     | `patch_property`                                  | Properties        |
+| 53  | PATCH  | `/v1/entities/properties/{property_id}/aliases`                                             | `patch_property_aliases`                          | Aliases           |
+| 54  | PATCH  | `/v1/entities/properties/{property_id}/descriptions`                                        | `patch_property_descriptions`                     | Descriptions      |
+| 55  | PATCH  | `/v1/entities/properties/{property_id}/labels`                                              | `patch_property_labels`                           | Labels            |
+| 56  | PATCH  | `/v1/entities/properties/{property_id}/statements/{statement_id}`                           | `patch_property_statement`                        | Statements        |
+| 57  | PATCH  | `/v1/statements/{statement_id}`                                                             | `patch_statement`                                 | Statements        |
 
-## Uncovered endpoints (20)
-
-### PATCH (12) — partial updates
-
-| Path                                                              | Target module |
-| ----------------------------------------------------------------- | ------------- |
-| `/v1/entities/items/{item_id}`                                    | Items         |
-| `/v1/entities/items/{item_id}/aliases`                            | Aliases       |
-| `/v1/entities/items/{item_id}/descriptions`                       | Descriptions  |
-| `/v1/entities/items/{item_id}/labels`                             | Labels        |
-| `/v1/entities/items/{item_id}/sitelinks`                          | Sitelinks     |
-| `/v1/entities/items/{item_id}/statements/{statement_id}`          | Statements    |
-| `/v1/entities/properties/{property_id}`                           | Properties    |
-| `/v1/entities/properties/{property_id}/aliases`                   | Aliases       |
-| `/v1/entities/properties/{property_id}/descriptions`              | Descriptions  |
-| `/v1/entities/properties/{property_id}/labels`                    | Labels        |
-| `/v1/entities/properties/{property_id}/statements/{statement_id}` | Statements    |
-| `/v1/statements/{statement_id}`                                   | Statements    |
+## Uncovered endpoints (8)
 
 ### DELETE (8) — removals
 
@@ -117,16 +112,7 @@ Done
 
 ### Phase 4 — PATCH: partial updates (12 endpoints)
 
-Applies JSON Patch operations. Requires auth. Largest batch — consider
-splitting into sub-PRs per module.
-
-- Items: `patch_item`
-- Labels: `patch_item_labels`, `patch_property_labels`
-- Descriptions: `patch_item_descriptions`, `patch_property_descriptions`
-- Aliases: `patch_item_aliases`, `patch_property_aliases`
-- Sitelinks: `patch_item_sitelinks`
-- Statements: `patch_item_statement`, `patch_property_statement`, `patch_statement`
-- Properties: `patch_property`
+Done
 
 ### Phase 5 — DELETE: remove resources (8 endpoints)
 
