@@ -21,6 +21,16 @@ module WikidataAdaptor
       def post_item(payload)
         post_json("#{endpoint}/v1/entities/items", payload)
       end
+
+      # Apply JSON Patch operations to an Item.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated Item.
+      def patch_item(item_id, payload)
+        patch_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}", payload)
+      end
     end
   end
 end
