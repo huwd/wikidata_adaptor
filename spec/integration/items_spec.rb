@@ -46,4 +46,24 @@ RSpec.describe "Items", :integration do
       expect(result["descriptions"]).to include("en" => desc)
     end
   end
+
+  describe "#patch_item" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @item = create_item!(labels: { "en" => "Patch item #{SecureRandom.hex(4)}" })
+    end
+
+    it "patches an item and returns the updated item" do
+      new_label = "Patched item #{SecureRandom.hex(4)}"
+      payload = {
+        "patch" => [{ "op" => "replace", "path" => "/labels/en", "value" => new_label }],
+        "comment" => "integration test"
+      }
+      result = api_client.patch_item(@item["id"], payload).parsed_content
+
+      expect(result["id"]).to eq(@item["id"])
+      expect(result["labels"]["en"]).to eq(new_label)
+    end
+  end
 end

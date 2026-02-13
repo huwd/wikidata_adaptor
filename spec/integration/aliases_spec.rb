@@ -88,5 +88,42 @@ RSpec.describe "Aliases", :integration do
         expect(result).to include(new_alias)
       end
     end
+
+    describe "#patch_property_aliases" do
+      it "patches property aliases and returns the updated aliases" do
+        new_alias = "Patched prop alias #{SecureRandom.hex(4)}"
+        payload = {
+          "patch" => [{ "op" => "add", "path" => "/en/-", "value" => new_alias }],
+          "comment" => "integration test"
+        }
+        result = api_client.patch_property_aliases(@property["id"], payload).parsed_content
+
+        expect(result["en"]).to include(new_alias)
+      end
+    end
+  end
+
+  describe "patch item aliases" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @item = create_item!(
+        labels: { "en" => "Patch alias item #{SecureRandom.hex(4)}" },
+        aliases: { "en" => ["Original alias #{SecureRandom.hex(4)}"] }
+      )
+    end
+
+    describe "#patch_item_aliases" do
+      it "patches item aliases and returns the updated aliases" do
+        new_alias = "Patched alias #{SecureRandom.hex(4)}"
+        payload = {
+          "patch" => [{ "op" => "add", "path" => "/en/-", "value" => new_alias }],
+          "comment" => "integration test"
+        }
+        result = api_client.patch_item_aliases(@item["id"], payload).parsed_content
+
+        expect(result["en"]).to include(new_alias)
+      end
+    end
   end
 end
