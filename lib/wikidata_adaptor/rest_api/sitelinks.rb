@@ -22,6 +22,17 @@ module WikidataAdaptor
       def get_item_sitelink(item_id, site_id)
         get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}")
       end
+
+      # Replace an Item's sitelink for a specific site.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] site_id The site identifier (e.g., 'enwiki').
+      # @param [Hash] payload Sitelink value and edit metadata.
+      #
+      # @return [Hash] The new sitelink.
+      def put_item_sitelink(item_id, site_id, payload)
+        put_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}", payload)
+      end
     end
   end
 end
