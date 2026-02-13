@@ -42,6 +42,35 @@ RSpec.describe "Statements", :integration do
         expect(result["value"]["content"]).to eq("test value")
       end
     end
+
+    describe "#put_item_statement" do
+      it "replaces a statement on an item and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original value" }
+          },
+          "comment" => "integration test: create for put"
+        }
+        created = api_client.post_item_statement(@item["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        put_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "replaced value" }
+          },
+          "comment" => "integration test: put"
+        }
+        result = api_client.put_item_statement(@item["id"], stmt_id, put_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("replaced value")
+
+        fetched = api_client.get_item_statement(@item["id"], stmt_id).parsed_content
+        expect(fetched["value"]["content"]).to eq("replaced value")
+      end
+    end
   end
 
   describe "property statements" do
@@ -79,6 +108,64 @@ RSpec.describe "Statements", :integration do
         expect(result["rank"]).to eq("normal")
         expect(result["property"]["id"]).to eq(@string_property["id"])
         expect(result["value"]["content"]).to eq("test value")
+      end
+    end
+
+    describe "#put_property_statement" do
+      it "replaces a statement on a property and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original prop value" }
+          },
+          "comment" => "integration test: create for put"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        put_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "replaced prop value" }
+          },
+          "comment" => "integration test: put"
+        }
+        result = api_client.put_property_statement(@property["id"], stmt_id, put_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("replaced prop value")
+
+        fetched = api_client.get_property_statement(@property["id"], stmt_id).parsed_content
+        expect(fetched["value"]["content"]).to eq("replaced prop value")
+      end
+    end
+
+    describe "#put_statement" do
+      it "replaces a statement by global statement_id and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original global value" }
+          },
+          "comment" => "integration test: create for put_statement"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        put_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "replaced global value" }
+          },
+          "comment" => "integration test: put_statement"
+        }
+        result = api_client.put_statement(stmt_id, put_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("replaced global value")
+
+        fetched = api_client.get_statement(stmt_id).parsed_content
+        expect(fetched["value"]["content"]).to eq("replaced global value")
       end
     end
   end

@@ -18,4 +18,10 @@ RSpec.describe "Sitelinks", :integration do
       expect(result).to be_a(Hash)
     end
   end
+
+  describe "#put_item_sitelink" do
+    it "is not testable without configured sites in Docker Wikibase" do
+      skip "Docker Wikibase does not have sites configured for sitelink testing"
+    end
+  end
 end
