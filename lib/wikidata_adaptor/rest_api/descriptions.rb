@@ -91,6 +91,26 @@ module WikidataAdaptor
       def put_property_description(property_id, lang_code, payload)
         put_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}", payload)
       end
+
+      # Apply JSON Patch operations to an Item's descriptions.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated descriptions.
+      def patch_item_descriptions(item_id, payload)
+        patch_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/descriptions", payload)
+      end
+
+      # Apply JSON Patch operations to a Property's descriptions.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated descriptions.
+      def patch_property_descriptions(property_id, payload)
+        patch_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions", payload)
+      end
     end
   end
 end

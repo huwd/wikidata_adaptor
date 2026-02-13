@@ -63,6 +63,26 @@ module WikidataAdaptor
       def post_property_aliases(property_id, lang_code, payload)
         post_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}", payload)
       end
+
+      # Apply JSON Patch operations to an Item's aliases.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated aliases.
+      def patch_item_aliases(item_id, payload)
+        patch_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/aliases", payload)
+      end
+
+      # Apply JSON Patch operations to a Property's aliases.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated aliases.
+      def patch_property_aliases(property_id, payload)
+        patch_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/aliases", payload)
+      end
     end
   end
 end

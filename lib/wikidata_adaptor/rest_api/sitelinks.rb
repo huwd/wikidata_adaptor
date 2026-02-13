@@ -33,6 +33,16 @@ module WikidataAdaptor
       def put_item_sitelink(item_id, site_id, payload)
         put_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}", payload)
       end
+
+      # Apply JSON Patch operations to an Item's sitelinks.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [Hash] payload JSON Patch operations and edit metadata.
+      #
+      # @return [Hash] The updated sitelinks.
+      def patch_item_sitelinks(item_id, payload)
+        patch_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks", payload)
+      end
     end
   end
 end
