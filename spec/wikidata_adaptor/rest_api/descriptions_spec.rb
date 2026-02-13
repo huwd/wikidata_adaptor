@@ -89,4 +89,36 @@ RSpec.describe WikidataAdaptor::RestApi::Descriptions do
       end
     end
   end
+
+  describe "#put_item_description" do
+    let(:payload) { { "description" => "British author and screenwriter", "comment" => "Update description" } }
+
+    it "replaces an item description" do
+      stub_put_item_description(item_id, "en", payload)
+      expect(api_client.put_item_description(item_id, "en", payload).raw_response_body)
+        .to eq("British author and screenwriter")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_item_description_unexpected_error(item_id, "en", payload)
+      expect { api_client.put_item_description(item_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#put_property_description" do
+    let(:payload) { { "description" => "class membership relation", "comment" => "Update description" } }
+
+    it "replaces a property description" do
+      stub_put_property_description(property_id, "en", payload)
+      expect(api_client.put_property_description(property_id, "en", payload).raw_response_body)
+        .to eq("class membership relation")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_property_description_unexpected_error(property_id, "en", payload)
+      expect { api_client.put_property_description(property_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

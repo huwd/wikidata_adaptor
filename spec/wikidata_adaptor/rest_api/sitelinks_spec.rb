@@ -61,4 +61,26 @@ RSpec.describe WikidataAdaptor::RestApi::Sitelinks do
                })
     end
   end
+
+  describe "#put_item_sitelink" do
+    let(:site_id) { "enwiki" }
+    let(:payload) do
+      {
+        "sitelink" => { "title" => "Douglas Adams", "badges" => [] },
+        "comment" => "Set sitelink"
+      }
+    end
+
+    it "replaces a sitelink for an item" do
+      stub_put_item_sitelink(item_id, site_id, payload)
+      expect(api_client.put_item_sitelink(item_id, site_id, payload).parsed_content)
+        .to include("title" => "Douglas Adams")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_item_sitelink_unexpected_error(item_id, site_id, payload)
+      expect { api_client.put_item_sitelink(item_id, site_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
