@@ -156,6 +156,36 @@ module WikidataAdaptor
             }
           )
         end
+
+        ##########################################
+        # PATCH /v1/entities/properties/:property_id
+        ##########################################
+        def stub_patch_property(property_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              id: property_id.to_s,
+              type: "property",
+              data_type: "string",
+              labels: { en: "is instance of" },
+              descriptions: { en: "that class of which this subject is a particular example and member" },
+              aliases: { en: ["is a"] },
+              statements: {}
+            }
+          )
+        end
+
+        def stub_patch_property_unexpected_error(property_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

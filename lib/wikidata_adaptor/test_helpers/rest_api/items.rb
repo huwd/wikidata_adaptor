@@ -142,6 +142,30 @@ module WikidataAdaptor
             }
           )
         end
+
+        ################################
+        # PATCH /v1/entities/items/:item_id
+        ################################
+        def stub_patch_item(item_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || load_path_example(
+              "/v1/entities/items/{item_id}", "get"
+            )
+          )
+        end
+
+        def stub_patch_item_unexpected_error(item_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

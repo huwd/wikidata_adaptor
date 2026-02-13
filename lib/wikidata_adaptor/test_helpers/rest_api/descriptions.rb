@@ -167,6 +167,56 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        ################################################
+        # PATCH /v1/entities/items/:item_id/descriptions
+        ################################################
+        def stub_patch_item_descriptions(item_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/descriptions",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              en: "British author",
+              fr: "écrivain de science-fiction et humoriste anglais"
+            }
+          )
+        end
+
+        def stub_patch_item_descriptions_unexpected_error(item_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/descriptions",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ######################################################
+        # PATCH /v1/entities/properties/:property_id/descriptions
+        ######################################################
+        def stub_patch_property_descriptions(property_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/descriptions",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              en: "class membership",
+              fr: "classe dont ce sujet est un exemple particulier"
+            }
+          )
+        end
+
+        def stub_patch_property_descriptions_unexpected_error(property_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/descriptions",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

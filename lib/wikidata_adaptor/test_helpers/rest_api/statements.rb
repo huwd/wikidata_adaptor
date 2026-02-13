@@ -243,6 +243,93 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        ##############################################################
+        # PATCH /v1/entities/items/:item_id/statements/:statement_id
+        ##############################################################
+        def stub_patch_item_statement(item_id, statement_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              id: statement_id.to_s,
+              rank: "normal",
+              property: { id: "P92", "data-type": "string" },
+              value: { content: "Patched goat", type: "value" },
+              qualifiers: [],
+              references: []
+            }
+          )
+        end
+
+        def stub_patch_item_statement_unexpected_error(item_id, statement_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ####################################################################
+        # PATCH /v1/entities/properties/:property_id/statements/:statement_id
+        ####################################################################
+        def stub_patch_property_statement(property_id, statement_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              id: statement_id.to_s,
+              rank: "normal",
+              property: { id: property_id.to_s, "data-type": "wikibase-item" },
+              value: { content: "Q99", type: "value" },
+              qualifiers: [],
+              references: []
+            }
+          )
+        end
+
+        def stub_patch_property_statement_unexpected_error(property_id, statement_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        #####################################
+        # PATCH /v1/statements/:statement_id
+        #####################################
+        def stub_patch_statement(statement_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              id: statement_id.to_s,
+              rank: "normal",
+              property: { id: "P92", "data-type": "string" },
+              value: { content: "Patched goat", type: "value" },
+              qualifiers: [],
+              references: []
+            }
+          )
+        end
+
+        def stub_patch_statement_unexpected_error(statement_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

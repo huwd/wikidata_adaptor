@@ -66,6 +66,34 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        #############################################
+        # PATCH /v1/entities/items/:item_id/sitelinks
+        #############################################
+        def stub_patch_item_sitelinks(item_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/sitelinks",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              enwiki: {
+                title: "Douglas Adams",
+                badges: [],
+                url: "https://en.wikipedia.org/wiki/Douglas_Adams"
+              }
+            }
+          )
+        end
+
+        def stub_patch_item_sitelinks_unexpected_error(item_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/sitelinks",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end
