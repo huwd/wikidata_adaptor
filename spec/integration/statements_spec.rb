@@ -43,6 +43,29 @@ RSpec.describe "Statements", :integration do
       end
     end
 
+    describe "#patch_item_statement" do
+      it "patches a statement on an item and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original patch value" }
+          },
+          "comment" => "integration test: create for patch"
+        }
+        created = api_client.post_item_statement(@item["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        patch_payload = {
+          "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "patched item value" }],
+          "comment" => "integration test: patch"
+        }
+        result = api_client.patch_item_statement(@item["id"], stmt_id, patch_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("patched item value")
+      end
+    end
+
     describe "#put_item_statement" do
       it "replaces a statement on an item and returns it" do
         create_payload = {
@@ -108,6 +131,52 @@ RSpec.describe "Statements", :integration do
         expect(result["rank"]).to eq("normal")
         expect(result["property"]["id"]).to eq(@string_property["id"])
         expect(result["value"]["content"]).to eq("test value")
+      end
+    end
+
+    describe "#patch_property_statement" do
+      it "patches a statement on a property and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original patch prop value" }
+          },
+          "comment" => "integration test: create for patch"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        patch_payload = {
+          "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "patched prop value" }],
+          "comment" => "integration test: patch"
+        }
+        result = api_client.patch_property_statement(@property["id"], stmt_id, patch_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("patched prop value")
+      end
+    end
+
+    describe "#patch_statement" do
+      it "patches a statement by global statement_id and returns it" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "original global patch value" }
+          },
+          "comment" => "integration test: create for patch_statement"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        patch_payload = {
+          "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "patched global value" }],
+          "comment" => "integration test: patch_statement"
+        }
+        result = api_client.patch_statement(stmt_id, patch_payload).parsed_content
+
+        expect(result["id"]).to eq(stmt_id)
+        expect(result["value"]["content"]).to eq("patched global value")
       end
     end
 

@@ -55,4 +55,24 @@ RSpec.describe "Properties", :integration do
       expect(result["descriptions"]).to include("en" => desc)
     end
   end
+
+  describe "#patch_property" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @property = create_property!(labels: { "en" => "Patch prop #{SecureRandom.hex(4)}" })
+    end
+
+    it "patches a property and returns the updated property" do
+      new_label = "Patched prop #{SecureRandom.hex(4)}"
+      payload = {
+        "patch" => [{ "op" => "replace", "path" => "/labels/en", "value" => new_label }],
+        "comment" => "integration test"
+      }
+      result = api_client.patch_property(@property["id"], payload).parsed_content
+
+      expect(result["id"]).to eq(@property["id"])
+      expect(result["labels"]["en"]).to eq(new_label)
+    end
+  end
 end

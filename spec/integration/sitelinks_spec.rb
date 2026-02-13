@@ -21,7 +21,13 @@ RSpec.describe "Sitelinks", :integration do
 
   describe "#put_item_sitelink" do
     it "is not testable without configured sites in Docker Wikibase" do
-      skip "Docker Wikibase does not have sites configured for sitelink testing"
+      skip "Docker Wikibase does not have sites configured for put_item_sitelink testing"
+    end
+  end
+
+  describe "#patch_item_sitelinks" do
+    it "is not testable without configured sites in Docker Wikibase" do
+      skip "Docker Wikibase does not have sites configured for patch_item_sitelinks testing"
     end
   end
 end
