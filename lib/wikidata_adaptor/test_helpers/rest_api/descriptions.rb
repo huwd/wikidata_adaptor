@@ -123,6 +123,50 @@ module WikidataAdaptor
             response_body: response_body
           )
         end
+
+        ################################################################
+        # PUT /v1/entities/items/:item_id/descriptions/:language_code
+        ################################################################
+        def stub_put_item_description(item_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/descriptions/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body || payload["description"]
+          )
+        end
+
+        def stub_put_item_description_unexpected_error(item_id, language_code, payload)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/descriptions/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ######################################################################
+        # PUT /v1/entities/properties/:property_id/descriptions/:language_code
+        ######################################################################
+        def stub_put_property_description(property_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/properties/#{property_id}/descriptions/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body || payload["description"]
+          )
+        end
+
+        def stub_put_property_description_unexpected_error(property_id, language_code, payload)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/properties/#{property_id}/descriptions/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end
