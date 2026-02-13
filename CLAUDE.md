@@ -74,6 +74,15 @@ Follows [GDS Git conventions](https://gds-way.digital.cabinet-office.gov.uk/stan
 - **Tell a story** — commits should be logically ordered so the history reads as a coherent narrative, not a jumbled log
 - **Clean up before sharing** — revise commit history on feature branches before opening a PR
 
+## Development Workflow (TDD)
+
+When adding new API endpoints, follow this test-driven approach:
+
+1. **Write unit tests (red)** — Add `describe` blocks to the relevant spec file calling `stub_*` and API methods that don't exist yet. Verify `bundle exec rubocop` passes and `bundle exec rspec` fails.
+2. **Add test helpers + implementation (green)** — Add `stub_*` helpers and implement the API methods. Verify `bundle exec rake` passes (rspec + rubocop).
+3. **Add integration tests** — Add tests to `spec/integration/` that exercise the real API.
+4. **Update TODO** — Move endpoints from "Uncovered" to "Covered" in `TODO.md` and update counts.
+
 ## Style
 
 - Double quotes for strings
