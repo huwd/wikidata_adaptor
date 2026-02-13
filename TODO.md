@@ -2,11 +2,11 @@
 
 Tracking coverage of Wikibase REST API v1.4 (OpenAPI spec).
 
-**Covered: 30 / 65 endpoints (46%)**
+**Covered: 45 / 65 endpoints (69%)**
 
 ## Covered endpoints
 
-All GET endpoints plus `POST /v1/entities/items` are implemented.
+All GET, POST, and PUT endpoints are implemented.
 
 | # | Method | Path | Ruby method | Module |
 |---|--------|------|-------------|--------|
@@ -40,25 +40,23 @@ All GET endpoints plus `POST /v1/entities/items` are implemented.
 | 28 | GET | `/v1/property-data-types` | `get_property_data_types` | PropertyDataTypes |
 | 29 | GET | `/v1/statements/{statement_id}` | `get_statement` | Statements |
 | 30 | POST | `/v1/entities/items` | `post_item` | Items |
+| 31 | GET | `/v1/entities/items/{item_id}/descriptions_with_language_fallback/{language_code}` | `get_item_description_with_language_fallback` | Descriptions |
+| 32 | GET | `/v1/entities/properties/{property_id}/descriptions_with_language_fallback/{language_code}` | `get_property_description_with_language_fallback` | Descriptions |
+| 33 | POST | `/v1/entities/items/{item_id}/aliases/{language_code}` | `post_item_aliases` | Aliases |
+| 34 | POST | `/v1/entities/items/{item_id}/statements` | `post_item_statement` | Statements |
+| 35 | POST | `/v1/entities/properties` | `post_property` | Properties |
+| 36 | POST | `/v1/entities/properties/{property_id}/aliases/{language_code}` | `post_property_aliases` | Aliases |
+| 37 | POST | `/v1/entities/properties/{property_id}/statements` | `post_property_statement` | Statements |
+| 38 | PUT | `/v1/entities/items/{item_id}/labels/{language_code}` | `put_item_label` | Labels |
+| 39 | PUT | `/v1/entities/properties/{property_id}/labels/{language_code}` | `put_property_label` | Labels |
+| 40 | PUT | `/v1/entities/items/{item_id}/descriptions/{language_code}` | `put_item_description` | Descriptions |
+| 41 | PUT | `/v1/entities/properties/{property_id}/descriptions/{language_code}` | `put_property_description` | Descriptions |
+| 42 | PUT | `/v1/entities/items/{item_id}/sitelinks/{site_id}` | `put_item_sitelink` | Sitelinks |
+| 43 | PUT | `/v1/entities/items/{item_id}/statements/{statement_id}` | `put_item_statement` | Statements |
+| 44 | PUT | `/v1/entities/properties/{property_id}/statements/{statement_id}` | `put_property_statement` | Statements |
+| 45 | PUT | `/v1/statements/{statement_id}` | `put_statement` | Statements |
 
-## Uncovered endpoints (35)
-
-### GET (2) — language fallback for descriptions
-
-| Path | Target module |
-|------|---------------|
-| `/v1/entities/items/{item_id}/descriptions_with_language_fallback/{language_code}` | Descriptions |
-| `/v1/entities/properties/{property_id}/descriptions_with_language_fallback/{language_code}` | Descriptions |
-
-### POST (5) — create sub-resources and properties
-
-| Path | Target module |
-|------|---------------|
-| `/v1/entities/items/{item_id}/aliases/{language_code}` | Aliases |
-| `/v1/entities/items/{item_id}/statements` | Statements |
-| `/v1/entities/properties` | Properties |
-| `/v1/entities/properties/{property_id}/aliases/{language_code}` | Aliases |
-| `/v1/entities/properties/{property_id}/statements` | Statements |
+## Uncovered endpoints (20)
 
 ### PATCH (12) — partial updates
 
@@ -74,19 +72,6 @@ All GET endpoints plus `POST /v1/entities/items` are implemented.
 | `/v1/entities/properties/{property_id}/aliases` | Aliases |
 | `/v1/entities/properties/{property_id}/descriptions` | Descriptions |
 | `/v1/entities/properties/{property_id}/labels` | Labels |
-| `/v1/entities/properties/{property_id}/statements/{statement_id}` | Statements |
-| `/v1/statements/{statement_id}` | Statements |
-
-### PUT (8) — full replacements
-
-| Path | Target module |
-|------|---------------|
-| `/v1/entities/items/{item_id}/descriptions/{language_code}` | Descriptions |
-| `/v1/entities/items/{item_id}/labels/{language_code}` | Labels |
-| `/v1/entities/items/{item_id}/sitelinks/{site_id}` | Sitelinks |
-| `/v1/entities/items/{item_id}/statements/{statement_id}` | Statements |
-| `/v1/entities/properties/{property_id}/descriptions/{language_code}` | Descriptions |
-| `/v1/entities/properties/{property_id}/labels/{language_code}` | Labels |
 | `/v1/entities/properties/{property_id}/statements/{statement_id}` | Statements |
 | `/v1/statements/{statement_id}` | Statements |
 

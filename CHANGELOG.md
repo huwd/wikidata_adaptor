@@ -9,6 +9,14 @@
   to append aliases in a given language
 - POST statement endpoints (`post_item_statement`,
   `post_property_statement`) to create statements on entities
+- PUT label endpoints (`put_item_label`, `put_property_label`)
+  to replace a single label by language
+- PUT description endpoints (`put_item_description`,
+  `put_property_description`) to replace a single description by language
+- PUT sitelink endpoint (`put_item_sitelink`) to replace a sitelink
+  by site ID
+- PUT statement endpoints (`put_item_statement`,
+  `put_property_statement`, `put_statement`) to replace statements
 - Search items (`search_items`, `suggest_items`) and search properties
   (`search_properties`) endpoints
 - Language fallback handling for labels via 307 redirect following
