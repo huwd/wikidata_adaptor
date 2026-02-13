@@ -167,6 +167,50 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        ##########################################
+        # PATCH /v1/entities/items/:item_id/labels
+        ##########################################
+        def stub_patch_item_labels(item_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/labels",
+            with: { body: payload.to_json },
+            response_body: response_body || { en: "Douglas Noel Adams", fr: "Douglas Adams" }
+          )
+        end
+
+        def stub_patch_item_labels_unexpected_error(item_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/items/#{item_id}/labels",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ################################################
+        # PATCH /v1/entities/properties/:property_id/labels
+        ################################################
+        def stub_patch_property_labels(property_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/labels",
+            with: { body: payload.to_json },
+            response_body: response_body || { en: "is instance of", fr: "est un(e)" }
+          )
+        end
+
+        def stub_patch_property_labels_unexpected_error(property_id, payload)
+          stub_rest_api_request(
+            :patch,
+            "/v1/entities/properties/#{property_id}/labels",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end
