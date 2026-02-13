@@ -61,5 +61,43 @@ RSpec.describe "Descriptions", :integration do
         expect(result).to eq(@en_desc)
       end
     end
+
+    describe "#put_property_description" do
+      it "replaces a property description and returns the new value" do
+        new_desc = "Updated prop desc #{SecureRandom.hex(4)}"
+        payload = { "description" => new_desc, "comment" => "integration test" }
+        result = api_client.put_property_description(@property["id"], "en", payload).parsed_content
+
+        expect(result).to eq(new_desc)
+
+        fetched = api_client.get_property_description(@property["id"], "en").parsed_content
+        expect(fetched).to eq(new_desc)
+      end
+    end
+  end
+
+  describe "put item descriptions" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @en_desc = "Desc to replace #{SecureRandom.hex(4)}"
+      @item = create_item!(
+        labels: { "en" => "Put desc item #{SecureRandom.hex(4)}" },
+        descriptions: { "en" => @en_desc }
+      )
+    end
+
+    describe "#put_item_description" do
+      it "replaces an item description and returns the new value" do
+        new_desc = "Updated item desc #{SecureRandom.hex(4)}"
+        payload = { "description" => new_desc, "comment" => "integration test" }
+        result = api_client.put_item_description(@item["id"], "en", payload).parsed_content
+
+        expect(result).to eq(new_desc)
+
+        fetched = api_client.get_item_description(@item["id"], "en").parsed_content
+        expect(fetched).to eq(new_desc)
+      end
+    end
   end
 end
