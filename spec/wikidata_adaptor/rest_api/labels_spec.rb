@@ -83,4 +83,36 @@ RSpec.describe WikidataAdaptor::RestApi::Labels do
       end
     end
   end
+
+  describe "#put_item_label" do
+    let(:payload) { { "label" => "Douglas Noel Adams", "comment" => "Update label" } }
+
+    it "replaces an item label" do
+      stub_put_item_label(item_id, "en", payload)
+      expect(api_client.put_item_label(item_id, "en", payload).raw_response_body)
+        .to eq("Douglas Noel Adams")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_item_label_unexpected_error(item_id, "en", payload)
+      expect { api_client.put_item_label(item_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#put_property_label" do
+    let(:payload) { { "label" => "is an instance of", "comment" => "Update label" } }
+
+    it "replaces a property label" do
+      stub_put_property_label(property_id, "en", payload)
+      expect(api_client.put_property_label(property_id, "en", payload).raw_response_body)
+        .to eq("is an instance of")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_property_label_unexpected_error(property_id, "en", payload)
+      expect { api_client.put_property_label(property_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

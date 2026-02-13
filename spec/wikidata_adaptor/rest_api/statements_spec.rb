@@ -155,4 +155,77 @@ RSpec.describe WikidataAdaptor::RestApi::Statements do
       expect { api_client.post_property_statement(property_id, payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#put_item_statement" do
+    let(:payload) do
+      {
+        "statement" => {
+          "property" => { "id" => "P92" },
+          "value" => { "type" => "value", "content" => "Updated goat" }
+        },
+        "comment" => "Replace statement"
+      }
+    end
+
+    it "replaces a statement on an item" do
+      stub_put_item_statement(item_id, statement_id, payload)
+      response = api_client.put_item_statement(item_id, statement_id, payload).parsed_content
+      expect(response).to include("id" => statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_item_statement_unexpected_error(item_id, statement_id, payload)
+      expect { api_client.put_item_statement(item_id, statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#put_property_statement" do
+    let(:property_statement_id) { "P31$11111111-2222-3333-4444-555555555555" }
+    let(:payload) do
+      {
+        "statement" => {
+          "property" => { "id" => property_id },
+          "value" => { "type" => "value", "content" => "Q42" }
+        },
+        "comment" => "Replace statement"
+      }
+    end
+
+    it "replaces a statement on a property" do
+      stub_put_property_statement(property_id, property_statement_id, payload)
+      response = api_client.put_property_statement(property_id, property_statement_id, payload).parsed_content
+      expect(response).to include("id" => property_statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_property_statement_unexpected_error(property_id, property_statement_id, payload)
+      expect { api_client.put_property_statement(property_id, property_statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#put_statement" do
+    let(:payload) do
+      {
+        "statement" => {
+          "property" => { "id" => "P92" },
+          "value" => { "type" => "value", "content" => "Updated goat" }
+        },
+        "comment" => "Replace statement"
+      }
+    end
+
+    it "replaces a statement by statement_id" do
+      stub_put_statement(statement_id, payload)
+      response = api_client.put_statement(statement_id, payload).parsed_content
+      expect(response).to include("id" => statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_put_statement_unexpected_error(statement_id, payload)
+      expect { api_client.put_statement(statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
