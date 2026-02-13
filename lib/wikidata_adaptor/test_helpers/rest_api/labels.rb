@@ -123,6 +123,50 @@ module WikidataAdaptor
             response_body: response_body
           )
         end
+
+        ##########################################################
+        # PUT /v1/entities/items/:item_id/labels/:language_code
+        ##########################################################
+        def stub_put_item_label(item_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/labels/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body || payload["label"]
+          )
+        end
+
+        def stub_put_item_label_unexpected_error(item_id, language_code, payload)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/labels/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ################################################################
+        # PUT /v1/entities/properties/:property_id/labels/:language_code
+        ################################################################
+        def stub_put_property_label(property_id, language_code, payload, response_body: nil)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/properties/#{property_id}/labels/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body || payload["label"]
+          )
+        end
+
+        def stub_put_property_label_unexpected_error(property_id, language_code, payload)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/properties/#{property_id}/labels/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

@@ -40,6 +40,32 @@ module WikidataAdaptor
             }
           )
         end
+
+        #####################################################
+        # PUT /v1/entities/items/:item_id/sitelinks/:site_id
+        #####################################################
+        def stub_put_item_sitelink(item_id, site_id, payload, response_body: nil)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/sitelinks/#{site_id}",
+            with: { body: payload.to_json },
+            response_body: response_body || {
+              title: "Douglas Adams",
+              badges: [],
+              url: "https://en.wikipedia.org/wiki/Douglas_Adams"
+            }
+          )
+        end
+
+        def stub_put_item_sitelink_unexpected_error(item_id, site_id, payload)
+          stub_rest_api_request(
+            :put,
+            "/v1/entities/items/#{item_id}/sitelinks/#{site_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end
