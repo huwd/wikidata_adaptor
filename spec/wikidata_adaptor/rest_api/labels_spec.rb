@@ -115,4 +115,46 @@ RSpec.describe WikidataAdaptor::RestApi::Labels do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item_labels" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/en", "value" => "Douglas Noel Adams" }],
+        "comment" => "Patch labels"
+      }
+    end
+
+    it "patches item labels and returns the updated labels" do
+      stub_patch_item_labels(item_id, payload)
+      expect(api_client.patch_item_labels(item_id, payload).parsed_content)
+        .to include("en" => "Douglas Noel Adams")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_labels_unexpected_error(item_id, payload)
+      expect { api_client.patch_item_labels(item_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#patch_property_labels" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/en", "value" => "is instance of" }],
+        "comment" => "Patch labels"
+      }
+    end
+
+    it "patches property labels and returns the updated labels" do
+      stub_patch_property_labels(property_id, payload)
+      expect(api_client.patch_property_labels(property_id, payload).parsed_content)
+        .to include("en" => "is instance of")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_property_labels_unexpected_error(property_id, payload)
+      expect { api_client.patch_property_labels(property_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

@@ -68,4 +68,25 @@ RSpec.describe WikidataAdaptor::RestApi::Properties do
       expect { api_client.post_property({}) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_property" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/labels/en", "value" => "is instance of" }],
+        "comment" => "Patch property"
+      }
+    end
+
+    it "patches a property and returns the updated property" do
+      stub_patch_property(property_id, payload)
+      response = api_client.patch_property(property_id, payload).parsed_content
+      expect(response.keys).to include("id", "type", "labels", "descriptions", "aliases", "statements")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_property_unexpected_error(property_id, payload)
+      expect { api_client.patch_property(property_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

@@ -121,4 +121,46 @@ RSpec.describe WikidataAdaptor::RestApi::Descriptions do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item_descriptions" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/en", "value" => "British author" }],
+        "comment" => "Patch descriptions"
+      }
+    end
+
+    it "patches item descriptions and returns the updated descriptions" do
+      stub_patch_item_descriptions(item_id, payload)
+      expect(api_client.patch_item_descriptions(item_id, payload).parsed_content)
+        .to include("en" => "British author")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_descriptions_unexpected_error(item_id, payload)
+      expect { api_client.patch_item_descriptions(item_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#patch_property_descriptions" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/en", "value" => "class membership" }],
+        "comment" => "Patch descriptions"
+      }
+    end
+
+    it "patches property descriptions and returns the updated descriptions" do
+      stub_patch_property_descriptions(property_id, payload)
+      expect(api_client.patch_property_descriptions(property_id, payload).parsed_content)
+        .to include("en" => "class membership")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_property_descriptions_unexpected_error(property_id, payload)
+      expect { api_client.patch_property_descriptions(property_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

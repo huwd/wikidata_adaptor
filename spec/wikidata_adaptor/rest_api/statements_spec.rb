@@ -228,4 +228,68 @@ RSpec.describe WikidataAdaptor::RestApi::Statements do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item_statement" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "Patched goat" }],
+        "comment" => "Patch statement"
+      }
+    end
+
+    it "patches a statement on an item" do
+      stub_patch_item_statement(item_id, statement_id, payload)
+      response = api_client.patch_item_statement(item_id, statement_id, payload).parsed_content
+      expect(response).to include("id" => statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_statement_unexpected_error(item_id, statement_id, payload)
+      expect { api_client.patch_item_statement(item_id, statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#patch_property_statement" do
+    let(:property_statement_id) { "P31$11111111-2222-3333-4444-555555555555" }
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "Q99" }],
+        "comment" => "Patch statement"
+      }
+    end
+
+    it "patches a statement on a property" do
+      stub_patch_property_statement(property_id, property_statement_id, payload)
+      response = api_client.patch_property_statement(property_id, property_statement_id, payload).parsed_content
+      expect(response).to include("id" => property_statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_property_statement_unexpected_error(property_id, property_statement_id, payload)
+      expect { api_client.patch_property_statement(property_id, property_statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#patch_statement" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "replace", "path" => "/value/content", "value" => "Patched goat" }],
+        "comment" => "Patch statement"
+      }
+    end
+
+    it "patches a statement by statement_id" do
+      stub_patch_statement(statement_id, payload)
+      response = api_client.patch_statement(statement_id, payload).parsed_content
+      expect(response).to include("id" => statement_id, "rank" => "normal")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_statement_unexpected_error(statement_id, payload)
+      expect { api_client.patch_statement(statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

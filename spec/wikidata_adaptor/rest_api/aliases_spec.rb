@@ -87,4 +87,46 @@ RSpec.describe WikidataAdaptor::RestApi::Aliases do
       expect { api_client.post_property_aliases(property_id, "en", payload) }.to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item_aliases" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "add", "path" => "/en/-", "value" => "DNA" }],
+        "comment" => "Patch aliases"
+      }
+    end
+
+    it "patches item aliases and returns the updated aliases" do
+      stub_patch_item_aliases(item_id, payload)
+      expect(api_client.patch_item_aliases(item_id, payload).parsed_content)
+        .to include("en" => ["Douglas Noel Adams", "Douglas Noël Adams", "DNA"])
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_aliases_unexpected_error(item_id, payload)
+      expect { api_client.patch_item_aliases(item_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#patch_property_aliases" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "add", "path" => "/en/-", "value" => "is an" }],
+        "comment" => "Patch aliases"
+      }
+    end
+
+    it "patches property aliases and returns the updated aliases" do
+      stub_patch_property_aliases(property_id, payload)
+      expect(api_client.patch_property_aliases(property_id, payload).parsed_content)
+        .to include("en" => ["is a", "is an"])
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_property_aliases_unexpected_error(property_id, payload)
+      expect { api_client.patch_property_aliases(property_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

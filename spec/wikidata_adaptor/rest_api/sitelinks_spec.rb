@@ -83,4 +83,25 @@ RSpec.describe WikidataAdaptor::RestApi::Sitelinks do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#patch_item_sitelinks" do
+    let(:payload) do
+      {
+        "patch" => [{ "op" => "add", "path" => "/dewiki", "value" => { "title" => "Douglas Adams" } }],
+        "comment" => "Patch sitelinks"
+      }
+    end
+
+    it "patches item sitelinks and returns the updated sitelinks" do
+      stub_patch_item_sitelinks(item_id, payload)
+      expect(api_client.patch_item_sitelinks(item_id, payload).parsed_content)
+        .to include("enwiki")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_patch_item_sitelinks_unexpected_error(item_id, payload)
+      expect { api_client.patch_item_sitelinks(item_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
