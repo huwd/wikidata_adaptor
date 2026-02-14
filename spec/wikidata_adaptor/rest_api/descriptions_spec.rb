@@ -163,4 +163,36 @@ RSpec.describe WikidataAdaptor::RestApi::Descriptions do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#delete_item_description" do
+    let(:payload) { { "comment" => "Delete description" } }
+
+    it "deletes an item description" do
+      stub_delete_item_description(item_id, "en", payload)
+      expect(api_client.delete_item_description(item_id, "en", payload).raw_response_body)
+        .to eq("Description deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_item_description_unexpected_error(item_id, "en", payload)
+      expect { api_client.delete_item_description(item_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#delete_property_description" do
+    let(:payload) { { "comment" => "Delete description" } }
+
+    it "deletes a property description" do
+      stub_delete_property_description(property_id, "en", payload)
+      expect(api_client.delete_property_description(property_id, "en", payload).raw_response_body)
+        .to eq("Description deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_property_description_unexpected_error(property_id, "en", payload)
+      expect { api_client.delete_property_description(property_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end

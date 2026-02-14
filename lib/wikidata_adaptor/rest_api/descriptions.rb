@@ -111,6 +111,28 @@ module WikidataAdaptor
       def patch_property_descriptions(property_id, payload)
         patch_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions", payload)
       end
+
+      # Delete an Item's description in a specific language.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_item_description(item_id, lang_code, payload)
+        delete_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/descriptions/#{lang_code}", payload)
+      end
+
+      # Delete a Property's description in a specific language.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_property_description(property_id, lang_code, payload)
+        delete_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/descriptions/#{lang_code}", payload)
+      end
     end
   end
 end
