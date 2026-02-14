@@ -111,6 +111,28 @@ module WikidataAdaptor
       def patch_property_labels(property_id, payload)
         patch_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/labels", payload)
       end
+
+      # Delete an Item's label in a specific language.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_item_label(item_id, lang_code, payload)
+        delete_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/labels/#{lang_code}", payload)
+      end
+
+      # Delete a Property's label in a specific language.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [String] lang_code The language code.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_property_label(property_id, lang_code, payload)
+        delete_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/labels/#{lang_code}", payload)
+      end
     end
   end
 end

@@ -211,6 +211,50 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        #############################################################
+        # DELETE /v1/entities/items/:item_id/labels/:language_code
+        #############################################################
+        def stub_delete_item_label(item_id, language_code, payload, response_body: "Label deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/labels/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_item_label_unexpected_error(item_id, language_code, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/labels/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ###################################################################
+        # DELETE /v1/entities/properties/:property_id/labels/:language_code
+        ###################################################################
+        def stub_delete_property_label(property_id, language_code, payload, response_body: "Label deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/labels/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_property_label_unexpected_error(property_id, language_code, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/labels/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

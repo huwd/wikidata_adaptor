@@ -157,4 +157,36 @@ RSpec.describe WikidataAdaptor::RestApi::Labels do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#delete_item_label" do
+    let(:payload) { { "comment" => "Delete label" } }
+
+    it "deletes an item label" do
+      stub_delete_item_label(item_id, "en", payload)
+      expect(api_client.delete_item_label(item_id, "en", payload).raw_response_body)
+        .to eq("Label deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_item_label_unexpected_error(item_id, "en", payload)
+      expect { api_client.delete_item_label(item_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#delete_property_label" do
+    let(:payload) { { "comment" => "Delete label" } }
+
+    it "deletes a property label" do
+      stub_delete_property_label(property_id, "en", payload)
+      expect(api_client.delete_property_label(property_id, "en", payload).raw_response_body)
+        .to eq("Label deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_property_label_unexpected_error(property_id, "en", payload)
+      expect { api_client.delete_property_label(property_id, "en", payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
