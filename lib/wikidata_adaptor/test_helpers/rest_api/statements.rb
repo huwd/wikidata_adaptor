@@ -330,6 +330,72 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        ###############################################################
+        # DELETE /v1/entities/items/:item_id/statements/:statement_id
+        ###############################################################
+        def stub_delete_item_statement(item_id, statement_id, payload, response_body: "Statement deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_item_statement_unexpected_error(item_id, statement_id, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        #####################################################################
+        # DELETE /v1/entities/properties/:property_id/statements/:statement_id
+        #####################################################################
+        def stub_delete_property_statement(property_id, statement_id, payload, response_body: "Statement deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_property_statement_unexpected_error(property_id, statement_id, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ########################################
+        # DELETE /v1/statements/:statement_id
+        ########################################
+        def stub_delete_statement(statement_id, payload, response_body: "Statement deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/statements/#{statement_id}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_statement_unexpected_error(statement_id, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/statements/#{statement_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

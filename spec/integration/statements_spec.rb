@@ -238,4 +238,115 @@ RSpec.describe "Statements", :integration do
       end
     end
   end
+
+  describe "delete item statement" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @item = create_item!(labels: { "en" => "Delete stmt item #{SecureRandom.hex(4)}" })
+      @string_property = create_property!(
+        data_type: "string",
+        labels: { "en" => "Delete stmt str prop #{SecureRandom.hex(4)}" }
+      )
+    end
+
+    describe "#delete_item_statement" do
+      it "deletes a statement from an item and confirms deletion" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "to be deleted" }
+          },
+          "comment" => "integration test: create for delete"
+        }
+        created = api_client.post_item_statement(@item["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        delete_payload = { "comment" => "integration test: delete" }
+        delete_response = api_client.delete_item_statement(@item["id"], stmt_id, delete_payload)
+
+        expect(delete_response.raw_response_body).to eq("Statement deleted")
+
+        wait_for_consistency(delete_response) do
+          expect { api_client.get_item_statement(@item["id"], stmt_id) }
+            .to raise_error(ApiAdaptor::HTTPNotFound)
+          true
+        end
+      end
+    end
+  end
+
+  describe "delete property statement" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @property = create_property!(labels: { "en" => "Delete stmt prop #{SecureRandom.hex(4)}" })
+      @string_property = create_property!(
+        data_type: "string",
+        labels: { "en" => "Delete stmt str prop 2 #{SecureRandom.hex(4)}" }
+      )
+    end
+
+    describe "#delete_property_statement" do
+      it "deletes a statement from a property and confirms deletion" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "to be deleted from prop" }
+          },
+          "comment" => "integration test: create for delete"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        delete_payload = { "comment" => "integration test: delete" }
+        delete_response = api_client.delete_property_statement(@property["id"], stmt_id, delete_payload)
+
+        expect(delete_response.raw_response_body).to eq("Statement deleted")
+
+        wait_for_consistency(delete_response) do
+          expect { api_client.get_property_statement(@property["id"], stmt_id) }
+            .to raise_error(ApiAdaptor::HTTPNotFound)
+          true
+        end
+      end
+    end
+  end
+
+  describe "delete statement (global)" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @property = create_property!(labels: { "en" => "Delete global stmt prop #{SecureRandom.hex(4)}" })
+      @string_property = create_property!(
+        data_type: "string",
+        labels: { "en" => "Delete global stmt str prop #{SecureRandom.hex(4)}" }
+      )
+    end
+
+    describe "#delete_statement" do
+      it "deletes a statement by global statement_id and confirms deletion" do
+        create_payload = {
+          "statement" => {
+            "property" => { "id" => @string_property["id"] },
+            "value" => { "type" => "value", "content" => "to be globally deleted" }
+          },
+          "comment" => "integration test: create for global delete"
+        }
+        created = api_client.post_property_statement(@property["id"], create_payload).parsed_content
+        stmt_id = created["id"]
+
+        delete_payload = { "comment" => "integration test: global delete" }
+        delete_response = api_client.delete_statement(stmt_id, delete_payload)
+
+        expect(delete_response.raw_response_body).to eq("Statement deleted")
+
+        wait_for_consistency(delete_response) do
+          expect { api_client.get_statement(stmt_id) }
+            .to raise_error(ApiAdaptor::HTTPNotFound)
+          true
+        end
+      end
+    end
+  end
 end

@@ -292,4 +292,53 @@ RSpec.describe WikidataAdaptor::RestApi::Statements do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#delete_item_statement" do
+    let(:payload) { { "comment" => "Delete statement" } }
+
+    it "deletes a statement on an item" do
+      stub_delete_item_statement(item_id, statement_id, payload)
+      expect(api_client.delete_item_statement(item_id, statement_id, payload).raw_response_body)
+        .to eq("Statement deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_item_statement_unexpected_error(item_id, statement_id, payload)
+      expect { api_client.delete_item_statement(item_id, statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#delete_property_statement" do
+    let(:property_statement_id) { "P31$11111111-2222-3333-4444-555555555555" }
+    let(:payload) { { "comment" => "Delete statement" } }
+
+    it "deletes a statement on a property" do
+      stub_delete_property_statement(property_id, property_statement_id, payload)
+      expect(api_client.delete_property_statement(property_id, property_statement_id, payload).raw_response_body)
+        .to eq("Statement deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_property_statement_unexpected_error(property_id, property_statement_id, payload)
+      expect { api_client.delete_property_statement(property_id, property_statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
+
+  describe "#delete_statement" do
+    let(:payload) { { "comment" => "Delete statement" } }
+
+    it "deletes a statement by statement_id" do
+      stub_delete_statement(statement_id, payload)
+      expect(api_client.delete_statement(statement_id, payload).raw_response_body)
+        .to eq("Statement deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_statement_unexpected_error(statement_id, payload)
+      expect { api_client.delete_statement(statement_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
