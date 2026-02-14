@@ -66,12 +66,13 @@ RSpec.describe "Descriptions", :integration do
       it "replaces a property description and returns the new value" do
         new_desc = "Updated prop desc #{SecureRandom.hex(4)}"
         payload = { "description" => new_desc, "comment" => "integration test" }
-        result = api_client.put_property_description(@property["id"], "en", payload).parsed_content
+        put_response = api_client.put_property_description(@property["id"], "en", payload)
 
-        expect(result).to eq(new_desc)
+        expect(put_response.parsed_content).to eq(new_desc)
 
-        sleep(1)
-        fetched = api_client.get_property_description(@property["id"], "en").parsed_content
+        fetched = wait_for_consistency(put_response) do
+          api_client.get_property_description(@property["id"], "en")
+        end
         expect(fetched).to eq(new_desc)
       end
     end
@@ -92,12 +93,13 @@ RSpec.describe "Descriptions", :integration do
       it "replaces an item description and returns the new value" do
         new_desc = "Updated item desc #{SecureRandom.hex(4)}"
         payload = { "description" => new_desc, "comment" => "integration test" }
-        result = api_client.put_item_description(@item["id"], "en", payload).parsed_content
+        put_response = api_client.put_item_description(@item["id"], "en", payload)
 
-        expect(result).to eq(new_desc)
+        expect(put_response.parsed_content).to eq(new_desc)
 
-        sleep(1)
-        fetched = api_client.get_item_description(@item["id"], "en").parsed_content
+        fetched = wait_for_consistency(put_response) do
+          api_client.get_item_description(@item["id"], "en")
+        end
         expect(fetched).to eq(new_desc)
       end
     end

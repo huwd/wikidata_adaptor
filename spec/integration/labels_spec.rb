@@ -88,12 +88,13 @@ RSpec.describe "Labels", :integration do
       it "replaces a property label and returns the new value" do
         new_label = "Updated prop label #{SecureRandom.hex(4)}"
         payload = { "label" => new_label, "comment" => "integration test" }
-        result = api_client.put_property_label(@property["id"], "en", payload).parsed_content
+        put_response = api_client.put_property_label(@property["id"], "en", payload)
 
-        expect(result).to eq(new_label)
+        expect(put_response.parsed_content).to eq(new_label)
 
-        sleep(1)
-        fetched = api_client.get_property_label(@property["id"], "en").parsed_content
+        fetched = wait_for_consistency(put_response) do
+          api_client.get_property_label(@property["id"], "en")
+        end
         expect(fetched).to eq(new_label)
       end
     end
@@ -110,12 +111,13 @@ RSpec.describe "Labels", :integration do
       it "replaces an item label and returns the new value" do
         new_label = "Updated item label #{SecureRandom.hex(4)}"
         payload = { "label" => new_label, "comment" => "integration test" }
-        result = api_client.put_item_label(@item["id"], "en", payload).parsed_content
+        put_response = api_client.put_item_label(@item["id"], "en", payload)
 
-        expect(result).to eq(new_label)
+        expect(put_response.parsed_content).to eq(new_label)
 
-        sleep(1)
-        fetched = api_client.get_item_label(@item["id"], "en").parsed_content
+        fetched = wait_for_consistency(put_response) do
+          api_client.get_item_label(@item["id"], "en")
+        end
         expect(fetched).to eq(new_label)
       end
     end
