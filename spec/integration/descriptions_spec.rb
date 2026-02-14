@@ -157,12 +157,10 @@ RSpec.describe "Descriptions", :integration do
         payload = { "comment" => "integration test delete" }
         delete_response = api_client.delete_item_description(@item["id"], "en", payload)
 
-        expect(delete_response.raw_response_body).to eq("Description deleted")
+        expect(delete_response.parsed_content).to eq("Description deleted")
 
-        wait_for_consistency(delete_response) do
-          result = api_client.get_item_descriptions(@item["id"]).parsed_content
-          result["en"].nil?
-        end
+        # Wait for eventual consistency - deletion should propagate
+        sleep 2
 
         final_descriptions = api_client.get_item_descriptions(@item["id"]).parsed_content
         expect(final_descriptions).not_to have_key("en")
@@ -186,12 +184,10 @@ RSpec.describe "Descriptions", :integration do
         payload = { "comment" => "integration test delete" }
         delete_response = api_client.delete_property_description(@property["id"], "en", payload)
 
-        expect(delete_response.raw_response_body).to eq("Description deleted")
+        expect(delete_response.parsed_content).to eq("Description deleted")
 
-        wait_for_consistency(delete_response) do
-          result = api_client.get_property_descriptions(@property["id"]).parsed_content
-          result["en"].nil?
-        end
+        # Wait for eventual consistency - deletion should propagate
+        sleep 2
 
         final_descriptions = api_client.get_property_descriptions(@property["id"]).parsed_content
         expect(final_descriptions).not_to have_key("en")
