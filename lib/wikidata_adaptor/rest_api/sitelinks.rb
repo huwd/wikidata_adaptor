@@ -43,6 +43,17 @@ module WikidataAdaptor
       def patch_item_sitelinks(item_id, payload)
         patch_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks", payload)
       end
+
+      # Delete an Item's sitelink for a specific site.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] site_id The site identifier (e.g., 'enwiki').
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_item_sitelink(item_id, site_id, payload)
+        delete_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/sitelinks/#{CGI.escape(site_id)}", payload)
+      end
     end
   end
 end

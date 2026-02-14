@@ -30,4 +30,10 @@ RSpec.describe "Sitelinks", :integration do
       skip "Docker Wikibase does not have sites configured for patch_item_sitelinks testing"
     end
   end
+
+  describe "#delete_item_sitelink" do
+    it "is not testable without configured sites in Docker Wikibase" do
+      skip "Docker Wikibase does not have sites configured for delete_item_sitelink testing"
+    end
+  end
 end

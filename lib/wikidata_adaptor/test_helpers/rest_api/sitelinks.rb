@@ -94,6 +94,28 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        ########################################################
+        # DELETE /v1/entities/items/:item_id/sitelinks/:site_id
+        ########################################################
+        def stub_delete_item_sitelink(item_id, site_id, payload, response_body: "Sitelink deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/sitelinks/#{site_id}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_item_sitelink_unexpected_error(item_id, site_id, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/sitelinks/#{site_id}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

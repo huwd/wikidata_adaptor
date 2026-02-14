@@ -104,4 +104,21 @@ RSpec.describe WikidataAdaptor::RestApi::Sitelinks do
         .to raise_error(ApiAdaptor::HTTPInternalServerError)
     end
   end
+
+  describe "#delete_item_sitelink" do
+    let(:site_id) { "enwiki" }
+    let(:payload) { { "comment" => "Delete sitelink" } }
+
+    it "deletes an item sitelink" do
+      stub_delete_item_sitelink(item_id, site_id, payload)
+      expect(api_client.delete_item_sitelink(item_id, site_id, payload).raw_response_body)
+        .to eq("Sitelink deleted")
+    end
+
+    it "raises a 500 response status if there's an unexpected error" do
+      stub_delete_item_sitelink_unexpected_error(item_id, site_id, payload)
+      expect { api_client.delete_item_sitelink(item_id, site_id, payload) }
+        .to raise_error(ApiAdaptor::HTTPInternalServerError)
+    end
+  end
 end
