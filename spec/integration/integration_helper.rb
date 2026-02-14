@@ -101,6 +101,49 @@ module WikidataAdaptor
           skip "Wikibase refused writes (#{e.class}). Set WIKIBASE_BEARER_TOKEN or configure the local instance to allow writes."
         end
       end
+
+      # Wait for eventual consistency after a write operation.
+      #
+      # Wikibase's REST API exhibits eventual consistency: writes (PUT/PATCH/POST) may
+      # return successfully before reads (GET) reflect the changes. The write path updates
+      # ETags/Last-Modified before the read path serves fresh content, making metadata
+      # unreliable for consistency checks.
+      #
+      # This helper polls with exponential backoff until the read returns the expected value.
+      # Empirically, updates usually propagate within 0.5-2s, but under load can take longer
+      # due to background job queues (htmlCacheUpdate, cirrusSearchLinksUpdate, etc).
+      #
+      # @param write_response [ApiAdaptor::Response] The response from the PUT/PATCH operation.
+      # @param max_tries [Integer] Maximum number of read attempts (default: 8).
+      # @yield A block that performs the read operation and returns a Response object.
+      # @return [Object] The read response's parsed_content once it matches the write.
+      # @raise [RSpec::Expectations::ExpectationNotMetError] If values don't match after max_tries.
+      #
+      # @example
+      #   put_response = api_client.put_item_label(item_id, "en", { label: "New Label", comment: "test" })
+      #   fetched = wait_for_consistency(put_response) do
+      #     api_client.get_item_label(item_id, "en")
+      #   end
+      def wait_for_consistency(write_response, max_tries: 8)
+        expected_value = write_response.parsed_content
+
+        last_actual = nil
+        max_tries.times do |attempt|
+          read_response = yield
+          last_actual = read_response.parsed_content
+
+          return last_actual if last_actual == expected_value
+
+          # Exponential backoff: 0.1s, 0.2s, 0.4s, 0.8s, 1.6s, 3.2s, 6.4s
+          # Total max wait: ~12.7s across 8 tries
+          # Most updates propagate in <1s; this handles pathological cases under load
+          sleep(0.1 * (2**attempt)) unless attempt == max_tries - 1
+        end
+
+        # If exhausted, fail with clear diagnostics
+        raise RSpec::Expectations::ExpectationNotMetError,
+              "Expected consistency after #{max_tries} tries.\nExpected: #{expected_value.inspect}\nGot: #{last_actual.inspect}"
+      end
     end
   end
 end
