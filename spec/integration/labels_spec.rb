@@ -156,4 +156,56 @@ RSpec.describe "Labels", :integration do
       end
     end
   end
+
+  describe "delete item labels" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @item = create_item!(labels: { "en" => "Delete label #{SecureRandom.hex(4)}", "fr" => "Supprimer #{SecureRandom.hex(4)}" })
+    end
+
+    describe "#delete_item_label" do
+      it "deletes an item label and confirms deletion" do
+        payload = { "comment" => "integration test delete" }
+        delete_response = api_client.delete_item_label(@item["id"], "en", payload)
+
+        expect(delete_response.raw_response_body).to eq("Label deleted")
+
+        wait_for_consistency(delete_response) do
+          result = api_client.get_item_labels(@item["id"]).parsed_content
+          result["en"].nil?
+        end
+
+        final_labels = api_client.get_item_labels(@item["id"]).parsed_content
+        expect(final_labels).not_to have_key("en")
+        expect(final_labels).to have_key("fr")
+      end
+    end
+  end
+
+  describe "delete property labels" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @property = create_property!(labels: { "en" => "Delete prop #{SecureRandom.hex(4)}", "fr" => "Supprimer prop #{SecureRandom.hex(4)}" })
+    end
+
+    describe "#delete_property_label" do
+      it "deletes a property label and confirms deletion" do
+        payload = { "comment" => "integration test delete" }
+        delete_response = api_client.delete_property_label(@property["id"], "en", payload)
+
+        expect(delete_response.raw_response_body).to eq("Label deleted")
+
+        wait_for_consistency(delete_response) do
+          result = api_client.get_property_labels(@property["id"]).parsed_content
+          result["en"].nil?
+        end
+
+        final_labels = api_client.get_property_labels(@property["id"]).parsed_content
+        expect(final_labels).not_to have_key("en")
+        expect(final_labels).to have_key("fr")
+      end
+    end
+  end
 end
