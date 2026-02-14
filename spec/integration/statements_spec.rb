@@ -265,13 +265,13 @@ RSpec.describe "Statements", :integration do
         delete_payload = { "comment" => "integration test: delete" }
         delete_response = api_client.delete_item_statement(@item["id"], stmt_id, delete_payload)
 
-        expect(delete_response.raw_response_body).to eq("Statement deleted")
+        expect(delete_response.parsed_content).to eq("Statement deleted")
 
-        wait_for_consistency(delete_response) do
-          expect { api_client.get_item_statement(@item["id"], stmt_id) }
-            .to raise_error(ApiAdaptor::HTTPNotFound)
-          true
-        end
+        # Wait for eventual consistency - deletion should propagate
+        sleep 2
+
+        expect { api_client.get_item_statement(@item["id"], stmt_id) }
+          .to raise_error(ApiAdaptor::HTTPNotFound)
       end
     end
   end
@@ -302,13 +302,13 @@ RSpec.describe "Statements", :integration do
         delete_payload = { "comment" => "integration test: delete" }
         delete_response = api_client.delete_property_statement(@property["id"], stmt_id, delete_payload)
 
-        expect(delete_response.raw_response_body).to eq("Statement deleted")
+        expect(delete_response.parsed_content).to eq("Statement deleted")
 
-        wait_for_consistency(delete_response) do
-          expect { api_client.get_property_statement(@property["id"], stmt_id) }
-            .to raise_error(ApiAdaptor::HTTPNotFound)
-          true
-        end
+        # Wait for eventual consistency - deletion should propagate
+        sleep 2
+
+        expect { api_client.get_property_statement(@property["id"], stmt_id) }
+          .to raise_error(ApiAdaptor::HTTPNotFound)
       end
     end
   end
@@ -339,13 +339,13 @@ RSpec.describe "Statements", :integration do
         delete_payload = { "comment" => "integration test: global delete" }
         delete_response = api_client.delete_statement(stmt_id, delete_payload)
 
-        expect(delete_response.raw_response_body).to eq("Statement deleted")
+        expect(delete_response.parsed_content).to eq("Statement deleted")
 
-        wait_for_consistency(delete_response) do
-          expect { api_client.get_statement(stmt_id) }
-            .to raise_error(ApiAdaptor::HTTPNotFound)
-          true
-        end
+        # Wait for eventual consistency - deletion should propagate
+        sleep 2
+
+        expect { api_client.get_statement(stmt_id) }
+          .to raise_error(ApiAdaptor::HTTPNotFound)
       end
     end
   end
