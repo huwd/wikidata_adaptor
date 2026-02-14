@@ -2,11 +2,11 @@
 
 Tracking coverage of Wikibase REST API v1.4 (OpenAPI spec).
 
-**Covered: 57 / 65 endpoints (88%)**
+**Covered: 65 / 65 endpoints (100%)**
 
 ## Covered endpoints
 
-All GET, POST, PUT, and PATCH endpoints are implemented.
+All endpoints from the Wikibase REST API v1.4 specification are now implemented.
 
 | #   | Method | Path                                                                                        | Ruby method                                       | Module            |
 | --- | ------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------- |
@@ -67,21 +67,14 @@ All GET, POST, PUT, and PATCH endpoints are implemented.
 | 55  | PATCH  | `/v1/entities/properties/{property_id}/labels`                                              | `patch_property_labels`                           | Labels            |
 | 56  | PATCH  | `/v1/entities/properties/{property_id}/statements/{statement_id}`                           | `patch_property_statement`                        | Statements        |
 | 57  | PATCH  | `/v1/statements/{statement_id}`                                                             | `patch_statement`                                 | Statements        |
-
-## Uncovered endpoints (8)
-
-### DELETE (8) — removals
-
-| Path                                                                 | Target module |
-| -------------------------------------------------------------------- | ------------- |
-| `/v1/entities/items/{item_id}/descriptions/{language_code}`          | Descriptions  |
-| `/v1/entities/items/{item_id}/labels/{language_code}`                | Labels        |
-| `/v1/entities/items/{item_id}/sitelinks/{site_id}`                   | Sitelinks     |
-| `/v1/entities/items/{item_id}/statements/{statement_id}`             | Statements    |
-| `/v1/entities/properties/{property_id}/descriptions/{language_code}` | Descriptions  |
-| `/v1/entities/properties/{property_id}/labels/{language_code}`       | Labels        |
-| `/v1/entities/properties/{property_id}/statements/{statement_id}`    | Statements    |
-| `/v1/statements/{statement_id}`                                      | Statements    |
+| 58  | DELETE | `/v1/entities/items/{item_id}/labels/{language_code}`                                       | `delete_item_label`                               | Labels            |
+| 59  | DELETE | `/v1/entities/properties/{property_id}/labels/{language_code}`                              | `delete_property_label`                           | Labels            |
+| 60  | DELETE | `/v1/entities/items/{item_id}/descriptions/{language_code}`                                 | `delete_item_description`                         | Descriptions      |
+| 61  | DELETE | `/v1/entities/properties/{property_id}/descriptions/{language_code}`                        | `delete_property_description`                     | Descriptions      |
+| 62  | DELETE | `/v1/entities/items/{item_id}/sitelinks/{site_id}`                                          | `delete_item_sitelink`                            | Sitelinks         |
+| 63  | DELETE | `/v1/entities/items/{item_id}/statements/{statement_id}`                                    | `delete_item_statement`                           | Statements        |
+| 64  | DELETE | `/v1/entities/properties/{property_id}/statements/{statement_id}`                           | `delete_property_statement`                       | Statements        |
+| 65  | DELETE | `/v1/statements/{statement_id}`                                                             | `delete_statement`                                | Statements        |
 
 ## Implementation plan
 
@@ -116,12 +109,7 @@ Done
 
 ### Phase 5 — DELETE: remove resources (8 endpoints)
 
-Requires auth. Returns 200 with a short confirmation string (e.g., "Sitelink deleted").
-
-- Labels: `delete_item_label`, `delete_property_label`
-- Descriptions: `delete_item_description`, `delete_property_description`
-- Sitelinks: `delete_item_sitelink`
-- Statements: `delete_item_statement`, `delete_property_statement`, `delete_statement`
+Done
 
 ## YARD Docs
 
