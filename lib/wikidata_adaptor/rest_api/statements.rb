@@ -116,6 +116,38 @@ module WikidataAdaptor
       def patch_statement(statement_id, payload)
         patch_json("#{endpoint}/v1/statements/#{statement_id}", payload)
       end
+
+      # Delete a Statement from an Item.
+      #
+      # @param [String] item_id The ID of the Item.
+      # @param [String] statement_id The Statement ID.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_item_statement(item_id, statement_id, payload)
+        delete_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/statements/#{statement_id}", payload)
+      end
+
+      # Delete a Statement from a Property.
+      #
+      # @param [String] property_id The ID of the Property.
+      # @param [String] statement_id The Statement ID.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_property_statement(property_id, statement_id, payload)
+        delete_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/statements/#{statement_id}", payload)
+      end
+
+      # Delete a Statement (global).
+      #
+      # @param [String] statement_id The Statement ID.
+      # @param [Hash] payload Edit metadata (comment).
+      #
+      # @return [String] Confirmation message.
+      def delete_statement(statement_id, payload)
+        delete_json("#{endpoint}/v1/statements/#{statement_id}", payload)
+      end
     end
   end
 end
