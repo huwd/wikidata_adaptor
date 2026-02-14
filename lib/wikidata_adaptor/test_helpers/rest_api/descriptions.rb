@@ -217,6 +217,50 @@ module WikidataAdaptor
             response_body: { code: "unexpected-error", message: "Unexpected Error" }
           )
         end
+
+        #####################################################################
+        # DELETE /v1/entities/items/:item_id/descriptions/:language_code
+        #####################################################################
+        def stub_delete_item_description(item_id, language_code, payload, response_body: "Description deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/descriptions/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_item_description_unexpected_error(item_id, language_code, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/items/#{item_id}/descriptions/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
+
+        ###########################################################################
+        # DELETE /v1/entities/properties/:property_id/descriptions/:language_code
+        ###########################################################################
+        def stub_delete_property_description(property_id, language_code, payload, response_body: "Description deleted")
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/descriptions/#{language_code}",
+            with: { body: payload.to_json },
+            response_body: response_body
+          )
+        end
+
+        def stub_delete_property_description_unexpected_error(property_id, language_code, payload)
+          stub_rest_api_request(
+            :delete,
+            "/v1/entities/properties/#{property_id}/descriptions/#{language_code}",
+            response_status: 500,
+            with: { body: payload.to_json },
+            response_body: { code: "unexpected-error", message: "Unexpected Error" }
+          )
+        end
       end
     end
   end

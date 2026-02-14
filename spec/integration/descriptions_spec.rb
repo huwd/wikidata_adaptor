@@ -141,4 +141,62 @@ RSpec.describe "Descriptions", :integration do
       end
     end
   end
+
+  describe "delete item descriptions" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @item = create_item!(
+        labels: { "en" => "Delete desc #{SecureRandom.hex(4)}" },
+        descriptions: { "en" => "Desc to delete #{SecureRandom.hex(4)}", "fr" => "Desc fr #{SecureRandom.hex(4)}" }
+      )
+    end
+
+    describe "#delete_item_description" do
+      it "deletes an item description and confirms deletion" do
+        payload = { "comment" => "integration test delete" }
+        delete_response = api_client.delete_item_description(@item["id"], "en", payload)
+
+        expect(delete_response.raw_response_body).to eq("Description deleted")
+
+        wait_for_consistency(delete_response) do
+          result = api_client.get_item_descriptions(@item["id"]).parsed_content
+          result["en"].nil?
+        end
+
+        final_descriptions = api_client.get_item_descriptions(@item["id"]).parsed_content
+        expect(final_descriptions).not_to have_key("en")
+        expect(final_descriptions).to have_key("fr")
+      end
+    end
+  end
+
+  describe "delete property descriptions" do
+    before(:context) do
+      extend WikidataAdaptor::Integration::Helpers
+
+      @property = create_property!(
+        labels: { "en" => "Delete prop desc #{SecureRandom.hex(4)}" },
+        descriptions: { "en" => "Prop desc to delete #{SecureRandom.hex(4)}", "fr" => "Prop desc fr #{SecureRandom.hex(4)}" }
+      )
+    end
+
+    describe "#delete_property_description" do
+      it "deletes a property description and confirms deletion" do
+        payload = { "comment" => "integration test delete" }
+        delete_response = api_client.delete_property_description(@property["id"], "en", payload)
+
+        expect(delete_response.raw_response_body).to eq("Description deleted")
+
+        wait_for_consistency(delete_response) do
+          result = api_client.get_property_descriptions(@property["id"]).parsed_content
+          result["en"].nil?
+        end
+
+        final_descriptions = api_client.get_property_descriptions(@property["id"]).parsed_content
+        expect(final_descriptions).not_to have_key("en")
+        expect(final_descriptions).to have_key("fr")
+      end
+    end
+  end
 end
