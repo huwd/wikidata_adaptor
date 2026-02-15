@@ -100,3 +100,101 @@ A good flow might look like:
 
 - Double quotes for strings
 - Ruby >= 3.2
+
+## Release Process
+
+WikidataAdaptor uses automated publishing to RubyGems via GitHub Actions with OIDC trusted publishing.
+
+### Prerequisites (One-time Setup)
+
+1. **Configure RubyGems Trusted Publishing**:
+   - Go to [RubyGems.org](https://rubygems.org) → Account Settings → Publishing
+   - Add trusted publisher:
+     - Repository: `huwd/wikidata_adaptor`
+     - Workflow: `release.yml`
+     - Environment: (leave empty)
+
+### Release Checklist
+
+1. **Update version**:
+   ```bash
+   # Edit lib/wikidata_adaptor/version.rb
+   VERSION = "1.0.0"
+   ```
+
+2. **Update CHANGELOG.md**:
+   ```markdown
+   ## [1.0.0] - YYYY-MM-DD
+
+   ### Added
+   - New feature X
+
+   ### Changed
+   - Updated Y
+
+   ### Fixed
+   - Bug Z
+   ```
+
+3. **Commit changes**:
+   ```bash
+   git add lib/wikidata_adaptor/version.rb CHANGELOG.md
+   git commit -m "chore: Prepare v1.0.0 release"
+   git push origin main
+   ```
+
+4. **Create and push tag**:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+5. **GitHub Actions automatically**:
+   - Validates tag format matches semantic versioning
+   - Verifies tag matches `WikidataAdaptor::VERSION`
+   - Confirms CHANGELOG mentions version
+   - Runs full test suite
+   - Runs RuboCop
+   - Builds YARD documentation
+   - Builds gem package
+   - Tests gem installation
+   - Publishes to RubyGems.org
+
+6. **Verify release**:
+   - Check [GitHub Actions](https://github.com/huwd/wikidata_adaptor/actions)
+   - Verify on [RubyGems.org](https://rubygems.org/gems/wikidata_adaptor)
+   - Test installation: `gem install wikidata_adaptor`
+
+### Dry Run (Testing Without Publishing)
+
+To test the release process without publishing:
+
+1. Go to [Actions → Release RubyGem](https://github.com/huwd/wikidata_adaptor/actions/workflows/release.yml)
+2. Click "Run workflow"
+3. Select branch: `main`
+4. Set dry_run: `true`
+5. Click "Run workflow"
+
+This runs all checks and builds the gem but skips publishing to RubyGems.
+
+### Version Numbering
+
+Follow [Semantic Versioning](https://semver.org/):
+- **MAJOR** (e.g., `1.0.0` → `2.0.0`): Incompatible API changes
+- **MINOR** (e.g., `1.0.0` → `1.1.0`): Backwards-compatible new features
+- **PATCH** (e.g., `1.1.0` → `1.1.1`, or `1.0.0` → `1.0.1`): Backwards-compatible bug fixes
+- **Pre-release** (e.g., `1.1.0-beta.1`): Alpha, beta, or release candidate
+- **Note**: During initial development (`0.y.z`), breaking changes may be introduced in minor versions; treat `0.y.z` as unstable.
+
+### Troubleshooting
+
+**Tag mismatch error**: Ensure `lib/wikidata_adaptor/version.rb` matches the git tag (without the `v` prefix).
+
+**CHANGELOG error**: Add an entry for the version in CHANGELOG.md following the format:
+```markdown
+## [1.0.0] - YYYY-MM-DD
+```
+
+**Tests fail**: Fix failing tests before releasing. The release will not proceed if tests fail.
+
+**RuboCop errors**: Fix linting errors before releasing.
