@@ -1,0 +1,102 @@
+name: Release RubyGem
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run all checks/build steps but do not publish"
+        required: true
+        default: "true"
+        type: choice
+        options: ["true", "false"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+          show-progress: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+
+      - name: Validate tag format
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          if ! echo "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+)*$'; then
+            echo "Error: Tag '$TAG' does not match expected format (e.g., v1.0.0, v1.0.0-beta.1)"
+            exit 1
+          fi
+          echo "Tag format is valid: $TAG"
+
+      - name: Determine version + tag
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(ruby -r ./lib/wikidata_adaptor/version -e 'puts WikidataAdaptor::VERSION')"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TAG="${GITHUB_REF_NAME}"
+          else
+            # For workflow_dispatch, use the version from the code
+            TAG="v${VERSION}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: "Preflight: tag must match WikidataAdaptor::VERSION"
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "v${{ steps.meta.outputs.version }}" = "${{ steps.meta.outputs.tag }}"
+
+      - name: "Preflight: CHANGELOG must mention this version"
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Eq "^##\\s*\\[?${{ steps.meta.outputs.version }}\\]?([[:space:]-]|$)" CHANGELOG.md
+
+      - name: Run test suite
+        shell: bash
+        run: bundle exec rspec
+
+      - name: Run RuboCop
+        shell: bash
+        run: bundle exec rubocop
+
+      - name: Build YARD documentation
+        shell: bash
+        run: bundle exec rake yard
+
+      - name: Build gem
+        run: bundle exec rake build
+
+      - name: Install built gem and require it
+        run: |
+          set -euo pipefail
+          GEM_FILE="$(ls -1 pkg/*.gem | head -n 1)"
+          gem install "$GEM_FILE" --no-document
+          ruby -r wikidata_adaptor -e 'puts WikidataAdaptor::VERSION'
+
+      - name: Publish to RubyGems (Trusted Publishing / OIDC)
+        if: ${{ github.event_name == 'push' }}
+        uses: rubygems/release-gem@1c162a739e8b4cb21a676e97b087e8268d8fc40b # v1
