@@ -3,6 +3,7 @@
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API property search endpoints
       module SearchProperty
         ########################################
         # GET /v0/search/properties

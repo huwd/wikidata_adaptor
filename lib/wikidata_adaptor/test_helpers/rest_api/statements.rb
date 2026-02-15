@@ -3,6 +3,7 @@
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API statements endpoints
       module Statements
         #########################################
         # GET /v1/entities/items/:item_id/statements
@@ -64,6 +65,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item statement request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_statement_unexpected_error(item_id, payload)
           stub_rest_api_request(
             :post,
@@ -144,6 +151,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property statement request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_statement_unexpected_error(property_id, payload)
           stub_rest_api_request(
             :post,
@@ -176,6 +189,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PUT item statement request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_put_item_statement_unexpected_error(item_id, statement_id, payload)
           stub_rest_api_request(
             :put,
@@ -205,6 +225,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PUT property statement request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_put_property_statement_unexpected_error(property_id, statement_id, payload)
           stub_rest_api_request(
             :put,
@@ -234,6 +261,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PUT statement request returning 500 error
+        #
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_put_statement_unexpected_error(statement_id, payload)
           stub_rest_api_request(
             :put,
@@ -263,6 +296,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH item statement request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_item_statement_unexpected_error(item_id, statement_id, payload)
           stub_rest_api_request(
             :patch,
@@ -292,6 +332,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH property statement request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_property_statement_unexpected_error(property_id, statement_id, payload)
           stub_rest_api_request(
             :patch,
@@ -321,6 +368,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH statement request returning 500 error
+        #
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_statement_unexpected_error(statement_id, payload)
           stub_rest_api_request(
             :patch,
@@ -343,6 +396,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub DELETE item statement request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_delete_item_statement_unexpected_error(item_id, statement_id, payload)
           stub_rest_api_request(
             :delete,
@@ -365,6 +425,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub DELETE property statement request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_delete_property_statement_unexpected_error(property_id, statement_id, payload)
           stub_rest_api_request(
             :delete,
@@ -387,6 +454,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub DELETE statement request returning 500 error
+        #
+        # @param statement_id [String] The statement ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_delete_statement_unexpected_error(statement_id, payload)
           stub_rest_api_request(
             :delete,

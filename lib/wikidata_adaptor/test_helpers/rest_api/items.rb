@@ -4,6 +4,7 @@ require_relative "support/support"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API items endpoints
       module Items
         include WikidataAdaptor::TestHelpers::RestApi::Support
 
@@ -20,6 +21,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET item request returning 400 invalid item error
+        #
+        # @param item_id [String] The item ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_item_invalid_item(item_id)
           stub_rest_api_request(
             :get,
@@ -32,6 +38,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET item request returning 404 not found error
+        #
+        # @param item_id [String] The item ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_item_not_found(item_id)
           stub_rest_api_request(
             :get,
@@ -44,6 +55,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET item request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_item_unexpected_error(item_id)
           stub_rest_api_request(
             :get,
@@ -69,6 +85,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item request returning 400 invalid item error
+        #
+        # @param response_body [Hash, nil] Optional response body
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_invalid_item(response_body = nil)
           stub_rest_api_request(
             :post,
@@ -81,6 +102,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item request returning 403 access denied error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_access_denied
           stub_rest_api_request(
             :post,
@@ -97,6 +121,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item request returning 422 data policy violation error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_data_policy_violation
           stub_rest_api_request(
             :post,
@@ -115,6 +142,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item request returning 429 request limit reached error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_request_limit_reached
           stub_rest_api_request(
             :post,
@@ -130,6 +160,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item request returning 500 error
+        #
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_unexpected_error(payload)
           stub_rest_api_request(
             :post,
@@ -157,6 +192,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH item request returning 500 error
+        #
+        # @param item_id [String] The item ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_item_unexpected_error(item_id, payload)
           stub_rest_api_request(
             :patch,

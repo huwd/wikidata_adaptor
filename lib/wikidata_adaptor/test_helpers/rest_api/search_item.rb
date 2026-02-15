@@ -3,6 +3,7 @@
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API item search endpoints
       module SearchItem
         ########################################
         # GET /v0/search/items
