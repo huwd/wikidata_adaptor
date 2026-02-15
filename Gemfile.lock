@@ -2,14 +2,14 @@ PATH
   remote: .
   specs:
     wikidata_adaptor (0.0.0)
-      api_adaptor (>= 0.1.0)
+      api_adaptor (>= 1.0.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.8.8)
       public_suffix (>= 2.0.2, < 8.0)
-    api_adaptor (0.1.0)
+    api_adaptor (1.0.0)
       addressable (~> 2.8)
       base64 (~> 0.3)
       bigdecimal (>= 3.3, < 5.0)
