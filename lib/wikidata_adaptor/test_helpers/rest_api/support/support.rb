@@ -3,13 +3,24 @@
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API support utilities
       module Support
+        # Load the OpenAPI specification from file
+        #
+        # @return [Hash] The parsed OpenAPI specification
         def load_openapi_spec
           JSON.parse(
             File.read(File.join("spec", "openapi", "openapi.json"))
           )
         end
 
+        # Load example response from OpenAPI specification for a given path and method
+        #
+        # @param path [String] The API path
+        # @param method [String] The HTTP method
+        # @param response_code [String] The HTTP response code
+        #
+        # @return [Hash] The example response
         def load_path_example(path, method, response_code = "200")
           load_openapi_spec.dig(
             "paths",
@@ -23,6 +34,9 @@ module WikidataAdaptor
           )
         end
 
+        # Fixture for a posted item response
+        #
+        # @return [Hash] The posted item response fixture
         def posted_item_response_fixture
           {
             "id" => "Q24",
@@ -144,6 +158,9 @@ module WikidataAdaptor
           }
         end
 
+        # Fixture for a posted property response
+        #
+        # @return [Hash] The posted property response fixture
         def posted_property_response_fixture
           {
             "id" => "P1",
@@ -162,6 +179,9 @@ module WikidataAdaptor
           }
         end
 
+        # Fixture for a property creation payload
+        #
+        # @return [Hash] The posted property payload fixture
         def posted_property_payload_fixture
           {
             "property" => {
@@ -180,6 +200,9 @@ module WikidataAdaptor
           }
         end
 
+        # Fixture for an item creation payload
+        #
+        # @return [Hash] The posted item payload fixture
         def posted_item_payload_fixture
           {
             "item" => {

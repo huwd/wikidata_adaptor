@@ -4,6 +4,7 @@ require_relative "support/support"
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API properties endpoints
       module Properties
         include WikidataAdaptor::TestHelpers::RestApi::Support
 
@@ -34,6 +35,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET property request returning 400 invalid property error
+        #
+        # @param property_id [String] The property ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_property_invalid_property(property_id)
           stub_rest_api_request(
             :get,
@@ -46,6 +52,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET property request returning 404 not found error
+        #
+        # @param property_id [String] The property ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_property_not_found(property_id)
           stub_rest_api_request(
             :get,
@@ -58,6 +69,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub GET property request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        #
+        # @return [WebMock::RequestStub]
         def stub_get_property_unexpected_error(property_id)
           stub_rest_api_request(
             :get,
@@ -83,6 +99,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property request returning 400 invalid property error
+        #
+        # @param response_body [Hash, nil] Optional response body
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_invalid_property(response_body = nil)
           stub_rest_api_request(
             :post,
@@ -95,6 +116,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property request returning 403 access denied error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_access_denied
           stub_rest_api_request(
             :post,
@@ -111,6 +135,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property request returning 422 data policy violation error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_data_policy_violation
           stub_rest_api_request(
             :post,
@@ -129,6 +156,9 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property request returning 429 request limit reached error
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_request_limit_reached
           stub_rest_api_request(
             :post,
@@ -144,6 +174,11 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property request returning 500 error
+        #
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_unexpected_error(payload)
           stub_rest_api_request(
             :post,
@@ -177,6 +212,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH property request returning 500 error
+        #
+        # @param property_id [String] The property ID
+        # @param payload [Hash] The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_property_unexpected_error(property_id, payload)
           stub_rest_api_request(
             :patch,

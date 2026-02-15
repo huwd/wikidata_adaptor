@@ -3,6 +3,7 @@
 module WikidataAdaptor
   module TestHelpers
     module RestApi
+      # WebMock stubs for Wikibase REST API alias endpoints
       module Aliases
         ######################################
         # GET /v1/entities/items/:item_id/aliases
@@ -50,6 +51,14 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item aliases request returning 201 Created
+        #
+        # @param [String] item_id The item ID
+        # @param [String] language_code The language code
+        # @param [Hash] payload The request payload
+        # @param [Array<String>, nil] response_body Optional custom response
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_aliases_created(item_id, language_code, payload, response_body: nil)
           stub_rest_api_request(
             :post,
@@ -60,6 +69,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST item aliases request returning 500 error
+        #
+        # @param [String] item_id The item ID
+        # @param [String] language_code The language code
+        # @param [Hash] payload The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_item_aliases_unexpected_error(item_id, language_code, payload)
           stub_rest_api_request(
             :post,
@@ -111,6 +127,14 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property aliases request returning 201 Created
+        #
+        # @param [String] property_id The property ID
+        # @param [String] language_code The language code
+        # @param [Hash] payload The request payload
+        # @param [Array<String>, nil] response_body Optional custom response
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_aliases_created(property_id, language_code, payload, response_body: nil)
           stub_rest_api_request(
             :post,
@@ -121,6 +145,13 @@ module WikidataAdaptor
           )
         end
 
+        # Stub POST property aliases request returning 500 error
+        #
+        # @param [String] property_id The property ID
+        # @param [String] language_code The language code
+        # @param [Hash] payload The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_post_property_aliases_unexpected_error(property_id, language_code, payload)
           stub_rest_api_request(
             :post,
@@ -149,6 +180,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH item aliases request returning 500 error
+        #
+        # @param [String] item_id The item ID
+        # @param [Hash] payload The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_item_aliases_unexpected_error(item_id, payload)
           stub_rest_api_request(
             :patch,
@@ -171,6 +208,12 @@ module WikidataAdaptor
           )
         end
 
+        # Stub PATCH property aliases request returning 500 error
+        #
+        # @param [String] property_id The property ID
+        # @param [Hash] payload The request payload
+        #
+        # @return [WebMock::RequestStub]
         def stub_patch_property_aliases_unexpected_error(property_id, payload)
           stub_rest_api_request(
             :patch,
