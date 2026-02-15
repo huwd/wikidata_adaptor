@@ -9,4 +9,12 @@ require "rubocop/rake_task"
 
 RuboCop::RakeTask.new
 
+require "yard"
+
+YARD::Rake::YardocTask.new do |t|
+  t.files = ["lib/**/*.rb"]
+  t.options = ["--output-dir", "doc", "--markup", "markdown"]
+  t.stats_options = ["--list-undoc"]
+end
+
 task default: %i[spec rubocop]
