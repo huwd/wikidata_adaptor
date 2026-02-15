@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wikidata_adaptor (0.0.0)
+    wikidata_adaptor (1.0.0)
       api_adaptor (>= 1.0.0)
 
 GEM
