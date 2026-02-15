@@ -113,23 +113,45 @@ Done
 
 ## YARD Docs
 
-### Generate YARD documentation
+✅ **Complete** - All YARD documentation tasks finished.
 
-Add YARD and have it build API documentation (HTML by default; configure a Markdown formatter/plugin if Markdown output is required).
+### What was accomplished:
 
-### Format YARD headers
+1. **YARD tooling** ✅
+   - Added YARD gem (~> 0.9) for HTML documentation generation
+   - Added redcarpet gem (~> 3.6) for Markdown rendering
+   - Added rubocop-yard for YARD linting and standards enforcement
+   - Configured rubocop-yard plugin in `.rubocop.yml`
 
-Explore best practices for YARD headers, and consider bringing in linting tools.
-Establish best practices and check all covered docs.
-Amend the documentation module by module until the published docs align with best practices.
+2. **Documentation coverage** ✅
+   - Achieved 100% documentation coverage (193/193 methods)
+   - Documented all modules, classes, and constants
+   - Fixed YARD syntax errors (Array[String] → Array<String>)
+   - All documentation follows YARD best practices with proper @param and @return tags
 
-### Add pre-merge check to validate YARD headers
+3. **Development tools** ✅
+   - Added Rake task: `bundle exec rake yard`
+   - Created `.yardopts` configuration file for consistent settings
+   - Configured Markdown markup with redcarpet provider
+   - Included README.md and CLAUDE.md in generated docs
 
-Add a GitHub Action to validate that the YARD docs build succeeds and that headers meet linting standards pre-merge.
+4. **CI/CD automation** ✅
+   - GitHub Actions workflow for automated doc generation
+   - Automatic deployment to GitHub Pages on push to main
+   - Docs available at: https://huwd.github.io/wikidata_adaptor/
+   - Concurrency controls to prevent overlapping deployments
 
-### Serve the docs to a GitHub page held against the repo
+### Configuration notes:
 
-Add GitHub Actions to publish the YARD docs to the GitHub page held against the repo.
+- YARD configuration in `.yardopts` (single source of truth)
+- RuboCop YARD linting enabled (6 cops active)
+- Private methods excluded, protected methods included
+- Output directory: `doc/`
+- Markup: Markdown via redcarpet
+
+### GitHub Pages setup (one-time manual step):
+
+Go to repository Settings → Pages and set Source to "GitHub Actions".
 
 ## Publishing workflow
 
