@@ -18,7 +18,7 @@ module WikidataAdaptor
       # @param [String] item_id The ID of the required Item.
       # @param [String] lang_code The requested resource language.
       #
-      # @return [Array[String]] Item's alias in a specific language.
+      # @return [Array<String>] Item's alias in a specific language.
       def get_item_alias(item_id, lang_code)
         get_json("#{endpoint}/v1/entities/items/#{CGI.escape(item_id)}/aliases/#{lang_code}")
       end
@@ -48,7 +48,7 @@ module WikidataAdaptor
       # @param [String] property_id The ID of the required Property.
       # @param [String] lang_code The requested resource language.
       #
-      # @return [Array[String]] Property's aliases in a specific language.
+      # @return [Array<String>] Property's aliases in a specific language.
       def get_property_alias(property_id, lang_code)
         get_json("#{endpoint}/v1/entities/properties/#{CGI.escape(property_id)}/aliases/#{lang_code}")
       end
