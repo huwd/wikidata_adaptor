@@ -9,7 +9,7 @@ GEM
   specs:
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    api_adaptor (1.0.0)
+    api_adaptor (1.0.2)
       addressable (~> 2.8)
       base64 (~> 0.3)
       bigdecimal (>= 3.3, < 5.0)
@@ -18,7 +18,7 @@ GEM
       rest-client (~> 2.1)
     ast (2.4.3)
     base64 (0.3.0)
-    bigdecimal (4.1.1)
+    bigdecimal (4.1.2)
     crack (1.0.1)
       bigdecimal
       rexml
@@ -27,9 +27,9 @@ GEM
     dotenv (3.2.0)
     hashdiff (1.2.1)
     http-accept (1.7.0)
-    http-cookie (1.1.0)
+    http-cookie (1.1.6)
       domain_name (~> 0.5)
-    json (2.19.7)
+    json (2.19.9)
     language_server-protocol (3.17.0.5)
     link_header (0.0.8)
     lint_roller (1.1.0)
@@ -37,7 +37,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0127)
+    mime-types-data (3.2026.0414)
     netrc (0.11.0)
     parallel (1.28.0)
     parser (3.3.11.1)
@@ -69,7 +69,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.6)
-    rubocop (1.86.2)
+    rubocop (1.87.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -86,10 +86,11 @@ GEM
     rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
-    rubocop-rspec (3.9.0)
+    rubocop-rspec (3.10.1)
       lint_roller (~> 1.1)
-      rubocop (~> 1.81)
-    rubocop-yard (1.1.0)
+      regexp_parser (>= 2.0)
+      rubocop (~> 1.86, >= 1.86.2)
+    rubocop-yard (1.2.0)
       lint_roller
       rubocop (~> 1.72)
       yard
@@ -112,7 +113,7 @@ DEPENDENCIES
   rake (~> 13.4)
   redcarpet (~> 3.6)
   rspec (~> 3.0)
-  rubocop (~> 1.86)
+  rubocop (~> 1.87)
   rubocop-rake
   rubocop-rspec
   rubocop-yard
