@@ -9,7 +9,7 @@ GEM
   specs:
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    api_adaptor (1.0.2)
+    api_adaptor (1.0.3)
       addressable (~> 2.8)
       base64 (~> 0.3)
       bigdecimal (>= 3.3, < 5.0)
