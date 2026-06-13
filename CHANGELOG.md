@@ -1,10 +1,17 @@
-## [Unreleased]
+## [1.0.1] - 2026-06-13
 
 ### Changed
 
 - Removed Ruby 3.2 from CI lint and test matrices; Ruby 3.2 reached
   end-of-life on 2026-04-01. Ruby 3.2 remains installable for this
   release but runtime support will be dropped in the next major version.
+- Updated `api_adaptor` dependency to 1.0.3
+- Updated bundler development dependencies: `rubocop` (1.87.0),
+  `rubocop-rspec` (3.10.1), `rubocop-yard` (1.2.0)
+- Updated GitHub Actions: `actions/checkout` (v6.0.3),
+  `actions/upload-pages-artifact` (v5.0.0),
+  `github/codeql-action` (v4.36.2), `ruby/setup-ruby` (v1.310.0),
+  `rubygems/release-gem` (v1.3.0)
 
 ## [1.0.0] - 2025-02-15
 
