@@ -15,6 +15,6 @@ gem "rubocop-yard"
 
 gem "dotenv", "3.2.0"
 gem "redcarpet", "~> 3.6"
-gem "rubocop", "~> 1.86"
+gem "rubocop", "~> 1.87"
 gem "webmock", "~> 3.26"
 gem "yard", "~> 0.9"
