@@ -1,3 +1,11 @@
+## [Unreleased]
+
+### Changed
+
+- Removed Ruby 3.2 from CI lint and test matrices; Ruby 3.2 reached
+  end-of-life on 2026-04-01. Ruby 3.2 remains installable for this
+  release but runtime support will be dropped in the next major version.
+
 ## [1.0.0] - 2025-02-15
 
 ### Added
